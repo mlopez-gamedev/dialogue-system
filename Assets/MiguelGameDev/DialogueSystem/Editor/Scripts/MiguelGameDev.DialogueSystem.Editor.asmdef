@@ -1,0 +1,16 @@
+{
+    "name": "MiguelGameDev.DialogueSystem.Editor",
+    "rootNamespace": "MiguelGameDev.DialogueSystem.Editor",
+    "references": [
+        "GUID:0170b0b80692a9e429ba5d5e1c96ea0d"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
