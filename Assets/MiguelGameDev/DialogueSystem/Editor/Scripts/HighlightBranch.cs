@@ -64,7 +64,7 @@ namespace MiguelGameDev.DialogueSystem.Editor
             //
         }
 
-        public IBranch SelectBranch(int branchIndex)
+        public bool TrySelectBranch(int branchIndex, out IBranch branch)
         {
             throw new NotImplementedException();
         }

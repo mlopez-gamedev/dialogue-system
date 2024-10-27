@@ -15,11 +15,11 @@
             Branch = branch;
         }
 
-        public SelectBranchInfo(string text)
+        public SelectBranchInfo(string text, BranchPosition branchPosition)
         {
             Text = text;
             ContinueInCurrentBranch = true;
-            BranchPosition = default;
+            BranchPosition = branchPosition;
             Branch = null;
         }
     }

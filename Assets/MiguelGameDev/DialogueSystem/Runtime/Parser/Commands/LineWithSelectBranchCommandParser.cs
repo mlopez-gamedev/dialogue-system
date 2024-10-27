@@ -69,17 +69,17 @@ namespace MiguelGameDev.DialogueSystem.Parser.Command
         private SelectBranchInfo CreateSelectBranchInfo(CommandPath commandPath, int branchIndex, string lineCommand)
         {
             var splits = lineCommand.Split(BranchSplitter);
+            var branchPosition = new BranchPosition(commandPath.CommandIndex, branchIndex);
 
             if (splits.Length > 1)
             {
-                var branchPosition = new BranchPosition(commandPath.CommandIndex, branchIndex);
                 var branchText = lineCommand.Substring(splits[0].Length);
                 var branch = _branchParser.Parse(branchText, commandPath.CommandIndex, commandPath.Level + 1, commandPath.BranchPositions.Append(branchPosition).ToArray());
 
                 return new SelectBranchInfo(splits[0], branchPosition, branch);
             }
 
-            return new SelectBranchInfo(splits[0]);
+            return new SelectBranchInfo(splits[0], branchPosition);
         }
     }
 }

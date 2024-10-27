@@ -37,8 +37,12 @@ namespace MiguelGameDev.DialogueSystem
 
         public void SelectBranch(int branchIndex)
         {
-            _currentBranch = _currentBranch.SelectBranch(branchIndex);
-            _currentBranch.Start();
+            if (_currentBranch.TrySelectBranch(branchIndex, out _currentBranch))
+            {
+                _currentBranch.Start();
+                return;
+            }
+            _currentBranch.Next();
         }
 
         public void End()

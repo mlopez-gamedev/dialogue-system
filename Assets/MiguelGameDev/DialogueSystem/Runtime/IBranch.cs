@@ -10,7 +10,7 @@
         void Start();
         void Next();
         void GoTo(int index);
-        IBranch SelectBranch(int branchIndex);
+        bool TrySelectBranch(int branchIndex, out IBranch branch);
         IBranch GoToBranchAt(BranchPosition position);
         void RegisterBranch(BranchPosition position, IBranch branch);
     }

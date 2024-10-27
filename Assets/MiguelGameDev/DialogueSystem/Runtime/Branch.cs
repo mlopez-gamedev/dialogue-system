@@ -34,7 +34,7 @@ namespace MiguelGameDev.DialogueSystem
         {
             foreach (var command in _commandQueue)
             {
-                UnityEngine.Debug.Log($"command: {command}");
+                Debug.Log($"command: {command}");
                 command.CreateBranches(this);
             }
         }
@@ -86,15 +86,16 @@ namespace MiguelGameDev.DialogueSystem
             ExecuteCurrentCommand(_currentCommandIndex);
         }
 
-        public IBranch SelectBranch(int branchIndex)
+        public bool TrySelectBranch(int branchIndex, out IBranch branch)
         {
             var branchPosition = new BranchPosition(_currentCommandIndex, branchIndex);
             if (_positionToBranch.ContainsKey(branchPosition))
             {
-                return _positionToBranch[branchPosition];
+                branch = _positionToBranch[branchPosition];
+                return true;
             }
-            Next();
-            return this;
+            branch = this;
+            return false;
         }
 
         public void GoTo(int index)

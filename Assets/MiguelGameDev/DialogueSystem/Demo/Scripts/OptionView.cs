@@ -18,7 +18,6 @@ namespace MiguelGameDev.DialogueSystem.Demo
 
             _view = view;
             _selectIndex = option.BranchIndex;
-
             _selectButton.onClick.AddListener(SelectOption);
         }
 
