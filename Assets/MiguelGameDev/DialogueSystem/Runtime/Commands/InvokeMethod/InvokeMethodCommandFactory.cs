@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 
@@ -26,7 +27,7 @@ namespace MiguelGameDev.DialogueSystem.Commands
 
             for (int i = 0; i < parameterNames.Length; ++i)
             {
-                parameters[i] = Convert.ChangeType(parameterNames[i].Trim(), methodParameters[i].ParameterType);
+                parameters[i] = Convert.ChangeType(parameterNames[i].Trim(), methodParameters[i].ParameterType, CultureInfo.InvariantCulture);
             }
 
             return new InvokeMethodCommand(_dialogueContext, _methodInfo, parameters);

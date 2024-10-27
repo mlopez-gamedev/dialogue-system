@@ -16,9 +16,7 @@
 
         public void DoSomething(bool boolParam, float numericParam, string stringParam)
         {
-            UnityEngine.Debug.Log($"boolParam: {boolParam}");
-            UnityEngine.Debug.Log($"numericParam: {numericParam}");
-            UnityEngine.Debug.Log($"stringParam: {stringParam}");
+            UnityEngine.Debug.Log($"Call DoSomething(boolParam: {boolParam}, numericParam: {numericParam}, stringParam: {stringParam})");
             _dialogue.Next();
         }
     }
