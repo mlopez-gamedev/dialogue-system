@@ -57,7 +57,7 @@ namespace MiguelGameDev.DialogueSystem.Editor
             _style.normal.background = MakeTex(2, 2, _highlighter.Style.BackgroundColor);
             _style.border = new RectOffset(2, 2, 2, 2);
             _style.richText = true;
-            _style.wordWrap = true;   
+            _style.wordWrap = true;
         }
 
         private void SetBoxStyle()
