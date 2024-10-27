@@ -45,7 +45,7 @@ namespace MiguelGameDev.DialogueSystem
             Assert.IsNotNull(_positionToBranch);
 
             _dialogue = dialogue;
-            _parent = null;
+            _parent = parent;
 
             foreach (var command in _commandQueue)
             {
@@ -122,9 +122,11 @@ namespace MiguelGameDev.DialogueSystem
             {
                 if (IsMain)
                 {
+                    Debug.Log("Dialogue end");
                     _dialogue.End();
                     return;
                 }
+                Debug.Log("Parent next");
                 _parent.Next();
                 return;
             }
