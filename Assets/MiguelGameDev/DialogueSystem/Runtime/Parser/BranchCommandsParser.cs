@@ -40,7 +40,6 @@ namespace MiguelGameDev.DialogueSystem.Parser
 
             var splitPattern = string.Join("|", splitters.Select(s => Regex.Escape(s)));
             var pattern = $"({splitPattern})(.*?)(?={splitPattern}|$)";
-            Debug.Log(pattern);
 
             var matches = Regex.Matches(text, pattern, RegexOptions.Singleline);
             var commands = new List<IDialogueCommand>(matches.Count);
@@ -50,13 +49,13 @@ namespace MiguelGameDev.DialogueSystem.Parser
             {
                 var lineCommand = text.Substring(match.Index + splitterLength, match.Length - splitterLength);
                 var command = _baseParser.Parse(lineCommand, new CommandPath(index, tabs, branchPositions));
-                ++index;
-
                 if (command == null)
                 {
                     // for comments
                     continue;
                 }
+
+                ++index;
                 commands.Add(command);
             }
 

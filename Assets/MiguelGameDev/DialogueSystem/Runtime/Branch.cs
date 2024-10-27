@@ -1,6 +1,6 @@
 using MiguelGameDev.DialogueSystem.Commands;
 using System.Collections.Generic;
-using System.Diagnostics;
+using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace MiguelGameDev.DialogueSystem
@@ -75,7 +75,7 @@ namespace MiguelGameDev.DialogueSystem
 
         public void Start()
         {
-            UnityEngine.Debug.Log("Branch.Start");
+            Debug.Log("Branch.Start");
             _currentCommandIndex = 0;
             ExecuteCurrentCommand(_currentCommandIndex);
         }

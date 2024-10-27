@@ -29,15 +29,14 @@ namespace MiguelGameDev.DialogueSystem.Parser.Command
                 return false;
             }
 
-            UnityEngine.Debug.Log($"lineCommand: {lineCommand}");
             var lineAndBranches = lineCommand.Split(SelectionSplitter, System.StringSplitOptions.RemoveEmptyEntries);
 
-            if (lineAndBranches.Length < 1)
+            if (lineAndBranches.Length <= 1)
             {
                 command = null;
                 return false;
             }
-            UnityEngine.Debug.Log($"lineAndBranches.Length: {lineAndBranches.Length}");
+
             var line = CreateLine(lineAndBranches[0].Substring(StartsWith.Length));
 
             var selectBranchInfos = new SelectBranchInfo[lineAndBranches.Length - 1];
