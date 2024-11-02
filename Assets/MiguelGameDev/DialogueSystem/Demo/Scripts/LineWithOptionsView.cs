@@ -39,7 +39,7 @@ namespace MiguelGameDev.DialogueSystem.Demo
             }
 
             _authorText.gameObject.SetActive(true);
-            _authorText.text += line.Author;
+            _authorText.text = line.Author;
         }
 
         public void SelectBranch(int branchIndex)

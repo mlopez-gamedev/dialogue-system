@@ -11,8 +11,8 @@ namespace MiguelGameDev.DialogueSystem.Editor
     {
         public override string StartsWith => "- ";
         public const string AuthorSeparatorPattern = @"(?<!\\): ";
-        public const string SelectionSplitter = "\n* ";
-        public const string BranchSplitter = "\n\t";
+        public const string SelectionSplitter = "*";
+        public const string BranchSplitter = "\t";
         private readonly char[] MessageTrim = new char[] { ' ', '\n' };
 
         private HighlightBranchParser _branchParser;
@@ -44,7 +44,7 @@ namespace MiguelGameDev.DialogueSystem.Editor
                 return false;
             }
 
-            var lineAndBranches = lineCommand.Split(SelectionSplitter, System.StringSplitOptions.RemoveEmptyEntries);
+            var lineAndBranches = lineCommand.Split(GetSelectionSplitter(commandPath.Level), System.StringSplitOptions.RemoveEmptyEntries);
 
             if (lineAndBranches.Length < 2)
             {
@@ -52,16 +52,16 @@ namespace MiguelGameDev.DialogueSystem.Editor
                 return false;
             }
 
-            var highlightedLine = string.Empty.PadRight(commandPath.Level, '\t');
-            highlightedLine = HighlightLine(lineAndBranches[0]);
+            var highlightedLine = GetBranchStarts(commandPath.Level);
+            highlightedLine += HighlightLine(lineAndBranches[0]);
 
             var branchSelectors = new HighlightSelectBranch[lineAndBranches.Length - 1];
             for (int i = 1; i < lineAndBranches.Length; ++i)
             {
-                var splits = lineAndBranches[i].Split(BranchSplitter);
+                var splits = lineAndBranches[i].Split(GetBranchSplitter(commandPath.Level));
 
-                var highlightedSelector = string.Empty.PadRight(commandPath.Level, '\t');
-                highlightedSelector += HighlightSelector(splits[0]);
+                //var highlightedSelector = GetBranchStarts(commandPath.Level);
+                var highlightedSelector = HighlightSelector(splits[0], commandPath.Level);
                 
                 IBranch branch = null;
                 if (splits.Length > 1)
@@ -102,13 +102,43 @@ namespace MiguelGameDev.DialogueSystem.Editor
             return highlightedCommand;
         }
 
-        private string HighlightSelector(string selectionCommand)
+        private string HighlightSelector(string selectionCommand, int level)
         {
-            string highlightedCommand = $"<b><color={_selectionLineStartWithColor}>{SelectionSplitter}</color></b>";
+            string highlightedCommand = $"<b><color={_selectionLineStartWithColor}>{GetSelectionSplitter(level)}</color></b>";
 
             highlightedCommand += $"<color={_selectionLineTextColor}>{selectionCommand}</color>";
 
             return highlightedCommand;
+        }
+
+        private string GetSelectionSplitter(int level)
+        {
+            var selectionbSplitter = "\n";
+            for (int i = 0; i < level; i++)
+            {
+                selectionbSplitter += BranchSplitter;
+            }
+            return selectionbSplitter + SelectionSplitter;
+        }
+
+        private string GetBranchSplitter(int level)
+        {
+            var branchSplitter = "\n" + BranchSplitter;
+            for (int i = 0; i < level; i++)
+            {
+                branchSplitter += BranchSplitter;
+            }
+            return branchSplitter;
+        }
+
+        private string GetBranchStarts(int level)
+        {
+            var branchSplitter = "";
+            for (int i = 0; i < level; i++)
+            {
+                branchSplitter += BranchSplitter;
+            }
+            return branchSplitter;
         }
     }
 
