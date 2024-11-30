@@ -16,6 +16,8 @@ MonoBehaviour:
   _normalColor: {r: 0.808871, g: 0.8271506, b: 0.85, a: 1}
   _wrongTextColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   _errorColor: {r: 0.6981132, g: 0.1284265, b: 0.1284265, a: 1}
+  _metadataSeparatorColor: {r: 0.6745098, g: 0.3616895, b: 0.27450982, a: 1}
+  _metadataColor: {r: 1, g: 0.5406977, b: 0.40697676, a: 1}
   _titleStartColor: {r: 0.766, g: 0.255078, b: 0.52355886, a: 1}
   _titleColor: {r: 1, g: 0.33673477, b: 0.68367356, a: 1}
   _goToStartColor: {r: 0.9643278, g: 0.4292453, b: 1, a: 1}

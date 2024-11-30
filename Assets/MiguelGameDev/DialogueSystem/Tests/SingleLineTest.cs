@@ -51,7 +51,7 @@ namespace MiguelGameDev.DialogueSystem.Tests
 
         private bool CheckLine(Line line, string message, bool hasAuthor = false, string author = null)
         {
-            var result = line.Text == message && line.HasAuthor == hasAuthor;
+            var result = line.Message == message && line.HasAuthor == hasAuthor;
             if (result && hasAuthor)
             {
                 return line.Author == author;

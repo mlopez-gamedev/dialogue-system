@@ -19,5 +19,4 @@ namespace MiguelGameDev.DialogueSystem
             return dialogue;
         }
     }
-
 }

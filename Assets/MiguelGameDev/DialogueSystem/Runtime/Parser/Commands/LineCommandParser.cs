@@ -32,17 +32,21 @@ namespace MiguelGameDev.DialogueSystem.Parser.Command
 
         private Line CreateLine(string lineCommand)
         {
+            string message, metadata;
             var match = Regex.Match(lineCommand, AuthorSeparatorPattern);
-
+            
+            
             if (!match.Success)
             {
-                return new Line(lineCommand);
+                (message, metadata) = SplitMessageAndMetadata(lineCommand);
+                return new Line(message, metadata);
             }
 
             var author = Regex.Unescape(lineCommand.Substring(0, match.Index));
-            var message = Regex.Unescape(lineCommand.Substring(match.Index + match.Length).Trim(MessageTrim));
+            var line = Regex.Unescape(lineCommand.Substring(match.Index + match.Length).Trim(MessageTrim));
+            (message, metadata) = SplitMessageAndMetadata(line);
 
-            return new Line(author, message);
+            return new Line(author, message, metadata);
         }
     }
 }

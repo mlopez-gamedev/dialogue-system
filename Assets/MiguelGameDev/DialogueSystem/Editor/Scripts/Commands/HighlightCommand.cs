@@ -4,7 +4,6 @@ using System.Text.RegularExpressions;
 
 namespace MiguelGameDev.DialogueSystem.Editor
 {
-
     public class HighlightCommand : IDialogueCommand
     {
         protected readonly StringBuilder _stringBuilder;

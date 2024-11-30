@@ -2,12 +2,15 @@
 {
     public readonly struct SelectBranch
     {
-        public string Text { get; }
+        public string Message { get; }
+        public string Metadata { get; }
+        public bool HasMetadata => !string.IsNullOrEmpty(Metadata);
         public int BranchIndex { get; }
 
-        public SelectBranch(string text, int branchIndex)
+        public SelectBranch(string message, string metadata, int branchIndex)
         {
-            Text = text;
+            Message = message;
+            Metadata = metadata;
             BranchIndex = branchIndex;
         }
     }

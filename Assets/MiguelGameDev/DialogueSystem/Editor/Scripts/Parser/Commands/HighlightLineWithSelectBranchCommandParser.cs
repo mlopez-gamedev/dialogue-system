@@ -21,6 +21,8 @@ namespace MiguelGameDev.DialogueSystem.Editor
         private readonly string _startWithColor;
         private readonly string _authorColor;
         private readonly string _authorSeparatorColor;
+        private readonly string _metadataColor;
+        private readonly string _metadataSeparatorColor;
         private readonly string _selectionLineStartWithColor;
         private readonly string _selectionLineTextColor;
 
@@ -32,6 +34,8 @@ namespace MiguelGameDev.DialogueSystem.Editor
             _startWithColor = "#" + ColorUtility.ToHtmlStringRGB(style.LineStartColor);
             _authorColor = "#" + ColorUtility.ToHtmlStringRGB(style.AuthorColor);
             _authorSeparatorColor = "#" + ColorUtility.ToHtmlStringRGB(style.AuthorSeparatorColor);
+            _metadataColor = "#" + ColorUtility.ToHtmlStringRGB(style.MetadataColor);
+            _metadataSeparatorColor = "#" + ColorUtility.ToHtmlStringRGB(style.MetadataSeparatorColor);
             _selectionLineStartWithColor = "#" + ColorUtility.ToHtmlStringRGB(style.SelectLineStartColor);
             _selectionLineTextColor = "#" + ColorUtility.ToHtmlStringRGB(style.SelectLineColor);
         }
@@ -83,21 +87,34 @@ namespace MiguelGameDev.DialogueSystem.Editor
             string highlightedCommand = $"<b><color={_startWithColor}>{StartsWith}</color></b>";
             lineCommand = lineCommand.Substring(StartsWith.Length);
 
+            string highlightedLine;
+            string message, metadata;
             var match = Regex.Match(lineCommand, AuthorSeparatorPattern);
 
             if (!match.Success)
             {
-
-                highlightedCommand += Regex.Unescape(lineCommand);
+                (message, metadata) = SplitMessageAndMetadata(lineCommand);
+                highlightedLine = message;
+                if (!string.IsNullOrEmpty(metadata))
+                {
+                    highlightedLine += $" <color={_metadataSeparatorColor}>[</color><color={_metadataColor}>{metadata}</color><color={_metadataSeparatorColor}>]</color>"; 
+                }
+                
+                highlightedCommand += Regex.Unescape(highlightedLine);
                 return highlightedCommand;
             }
 
 
             var author = Regex.Unescape(lineCommand.Substring(0, match.Index));
-            var message = Regex.Unescape(lineCommand.Substring(match.Index + match.Length));
+            var line = Regex.Unescape(lineCommand.Substring(match.Index + match.Length));
+            (message, metadata) = SplitMessageAndMetadata(line);
+            highlightedLine = message;
+            if (!string.IsNullOrEmpty(metadata))
+            {
+                highlightedLine += $" <color={_metadataSeparatorColor}>[</color><color={_metadataColor}>{metadata}</color><color={_metadataSeparatorColor}>]</color>"; 
+            }
 
-
-            highlightedCommand += $"<color={_authorColor}>{author}</color><color={_authorSeparatorColor}>:</color> {message}";
+            highlightedCommand += $"<color={_authorColor}>{author}</color><color={_authorSeparatorColor}>:</color> {highlightedLine}";
 
             return highlightedCommand;
         }
@@ -106,7 +123,14 @@ namespace MiguelGameDev.DialogueSystem.Editor
         {
             string highlightedCommand = $"<b><color={_selectionLineStartWithColor}>{GetSelectionSplitter(level)}</color></b>";
 
-            highlightedCommand += $"<color={_selectionLineTextColor}>{selectionCommand}</color>";
+            var (message, metadata) = SplitMessageAndMetadata(selectionCommand);
+            var highlightedLine =  $"<color={_selectionLineTextColor}>{message}</color>";;
+            if (!string.IsNullOrEmpty(metadata))
+            {
+                highlightedLine += $" <color={_metadataSeparatorColor}>[</color><color={_metadataColor}>{metadata}</color><color={_metadataSeparatorColor}>]</color>"; 
+            }
+            
+            highlightedCommand += highlightedLine;
 
             return highlightedCommand;
         }

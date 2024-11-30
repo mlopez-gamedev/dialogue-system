@@ -1,9 +1,11 @@
-﻿using MiguelGameDev.DialogueSystem.Commands;
+﻿using System.Text.RegularExpressions;
+using MiguelGameDev.DialogueSystem.Commands;
 
 namespace MiguelGameDev.DialogueSystem.Parser.Command
 {
     public abstract class CommandParser
     {
+        private const string MetadataPattern = @"^(.*?)\s*\[(.*?)\]$";
         public abstract string StartsWith { get; }
         private CommandParser _nextParser;
         internal CommandParser NextParser => _nextParser;
@@ -24,6 +26,16 @@ namespace MiguelGameDev.DialogueSystem.Parser.Command
         }
 
         protected abstract bool TryParse(string lineCommand, CommandPath commandPath, out IDialogueCommand command);
-    }
 
+        protected (string, string) SplitMessageAndMetadata(string line)
+        {
+            var match = Regex.Match(line, MetadataPattern);
+            if (!match.Success)
+            {
+                return (line, string.Empty);
+            }
+            
+            return (match.Groups[1].Value, match.Groups[2].Value);
+        }
+    }
 }

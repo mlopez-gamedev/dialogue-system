@@ -52,18 +52,21 @@ namespace MiguelGameDev.DialogueSystem.Parser.Command
 
         private Line CreateLine(string lineCommand)
         {
+            string message, metadata;
             var match = Regex.Match(lineCommand, AuthorSeparatorPattern);
 
             if (!match.Success)
             {
-                return new Line(lineCommand);
+                (message, metadata) = SplitMessageAndMetadata(lineCommand);
+                return new Line(message, metadata);
             }
 
 
             var author = Regex.Unescape(lineCommand.Substring(0, match.Index));
-            var message = Regex.Unescape(lineCommand.Substring(match.Index + match.Length).Trim(MessageTrim));
+            var line = Regex.Unescape(lineCommand.Substring(match.Index + match.Length).Trim(MessageTrim));
+            (message, metadata) = SplitMessageAndMetadata(line);
 
-            return new Line(author, message);
+            return new Line(author, message, metadata);
         }
 
         private SelectBranchInfo CreateSelectBranchInfo(CommandPath commandPath, int branchIndex, string lineCommand)
@@ -71,15 +74,17 @@ namespace MiguelGameDev.DialogueSystem.Parser.Command
             var splits = lineCommand.Split(GetBranchSplitter(commandPath.Level));
             var branchPosition = new BranchPosition(commandPath.CommandIndex, branchIndex);
 
+            var (message, metadata) = SplitMessageAndMetadata(splits[0]);
+            
             if (splits.Length > 1)
             {
                 var branchText = lineCommand.Substring(splits[0].Length);
                 var branch = _branchParser.Parse(branchText, commandPath.CommandIndex, commandPath.Level + 1, commandPath.BranchPositions.Append(branchPosition).ToArray());
-
-                return new SelectBranchInfo(splits[0], branchPosition, branch);
+                
+                return new SelectBranchInfo(message, metadata, branchPosition, branch);
             }
 
-            return new SelectBranchInfo(splits[0], branchPosition);
+            return new SelectBranchInfo(message, metadata, branchPosition);
         }
 
         private string GetSelectionSplitter(int level)

@@ -26,7 +26,7 @@ namespace MiguelGameDev.DialogueSystem.Demo
         {
             gameObject.SetActive(true);
             _nextButton.onClick.AddListener(Next);
-            _messageText.text = line.Text;
+            _messageText.text = line.Message;
             if (!line.HasAuthor)
             {
                 _authorText.gameObject.SetActive(false);

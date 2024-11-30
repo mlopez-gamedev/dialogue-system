@@ -14,11 +14,17 @@ namespace MiguelGameDev.DialogueSystem.Demo
 
         public void SetOption(LineWithOptionsView view, SelectBranch option)
         {
-            _optionText.text = option.Text;
-
+            string message = option.Message;
+            if (option.HasMetadata)
+            {
+                message += $" <i><color=grey>({option.Metadata})<color=grey></i>";
+            }
+            _optionText.text = message;
+            
             _view = view;
             _selectIndex = option.BranchIndex;
             _selectButton.onClick.AddListener(SelectOption);
+            _selectButton.interactable = option.Metadata != "disabled";
         }
 
         private void SelectOption()

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace MiguelGameDev.DialogueSystem.Editor
 {
@@ -9,7 +10,11 @@ namespace MiguelGameDev.DialogueSystem.Editor
         [SerializeField] private Color _normalColor = Color.white;
         [SerializeField] private Color _wrongTextColor = Color.grey;
         [SerializeField] private Color _errorColor = Color.red;
-
+        
+        [Header("Metadata")]
+        [SerializeField] private Color _metadataSeparatorColor = Color.white;
+        [SerializeField] private Color _metadataColor = Color.white;
+        
         [Header("Title")]
         [SerializeField] private Color _titleStartColor = Color.white;
         [SerializeField] private Color _titleColor = Color.white;
@@ -43,6 +48,8 @@ namespace MiguelGameDev.DialogueSystem.Editor
         public Color NormalColor => _normalColor;
         public Color WrongTextColor => _wrongTextColor;
         public Color ErrorColor => _errorColor;
+        public Color MetadataSeparatorColor => _metadataSeparatorColor;
+        public Color MetadataColor => _metadataColor;
 
         public Color TitleStartColor => _titleStartColor;
         public Color TitleColor => _titleColor;
