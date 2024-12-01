@@ -35,10 +35,28 @@ namespace MiguelGameDev.DialogueSystem.Parser
 
             var splitPattern = string.Join("|", splitters.Select(s => Regex.Escape(s)));
             var pattern = $"({splitPattern})(.*?)(?={splitPattern}|$)";
+            
             var matches = Regex.Matches(text, pattern, RegexOptions.Singleline);
             var commands = new List<IDialogueCommand>(matches.Count);
 
             var index = 0;
+
+            if (matches.Count == 0)
+            {
+                var command = _baseParser.Parse(text, new CommandPath(index, level, branchPositions));
+                commands.Add(command);
+                return commands.ToArray();
+            }
+
+            // Detect invalid command at the beginning, so user can write
+            if (matches[0].Index > splitterLength)
+            {
+                int pos = splitterLength + 1;
+                var command = _baseParser.Parse(text.Substring(pos, matches[0].Index - pos), new CommandPath(index, level, branchPositions));
+                ++index;
+                commands.Add(command);
+            }
+            
             var lastIndex = 0;
             foreach (Match match in matches)
             {
@@ -55,7 +73,7 @@ namespace MiguelGameDev.DialogueSystem.Parser
                 commands.Add(command);
             }
 
-            // This print invalid lines, so user can write
+            // // Detect invalid command at the end, so user can write
             var lastLineCommand = text.Substring(lastIndex);
             if (!string.IsNullOrEmpty(lastLineCommand))
             {

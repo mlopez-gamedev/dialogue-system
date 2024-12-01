@@ -28,8 +28,6 @@ namespace MiguelGameDev.DialogueSystem.Editor
                 command = null;
                 return false;
             }
-
-            UnityEngine.Debug.Log("DefaultHighlightParser: " + lineCommand);
             
             var highlightedText = GetBranchStarts(commandPath.Level);
             lineCommand = $"<color={_wrongTextColor}><i>{lineCommand}</i></color> <color={_errorColor}>(this will be ignored)</color>";

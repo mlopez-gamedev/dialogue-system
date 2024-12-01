@@ -32,6 +32,12 @@ namespace MiguelGameDev.DialogueSystem.Editor
         [SerializeField] private Color _selectLineStartColor = Color.white;
         [SerializeField] private Color _selectLineColor = Color.white;
 
+        [Header("Random")]
+        [SerializeField] private Color _randomStartColor = Color.white;
+        [SerializeField] private Color _randomChancesStartColor = Color.white;
+        [SerializeField] private Color _randomChancesColor = Color.white;
+
+        
         [Header("Invoke Method")]
         [SerializeField] private Color _invokeMethodStartColor = Color.white;
         [SerializeField] private Color _invokeMethodColor = Color.white;
@@ -63,6 +69,10 @@ namespace MiguelGameDev.DialogueSystem.Editor
 
         public Color SelectLineStartColor => _selectLineStartColor;
         public Color SelectLineColor => _selectLineColor;
+        
+        public Color RandomStartColor => _randomStartColor;
+        public Color RandomChancesStartColor => _randomChancesStartColor;
+        public Color RandomChancesColor => _randomChancesColor;
 
         public Color InvokeMethodStartColor => _invokeMethodStartColor;
         public Color InvokeMethodColor => _invokeMethodColor;

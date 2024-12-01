@@ -25,7 +25,6 @@ namespace MiguelGameDev.DialogueSystem
 
         public void Start()
         {
-            UnityEngine.Debug.Log("Dialogue.Start");
             _currentBranch = _mainBranch;
             _currentBranch.Start();
         }
@@ -42,6 +41,12 @@ namespace MiguelGameDev.DialogueSystem
                 _currentBranch.Start();
                 return;
             }
+            _currentBranch.Next();
+        }
+
+        public void SelectBranch(IBranch branch)
+        {
+            _currentBranch = branch;
             _currentBranch.Next();
         }
 

@@ -27,6 +27,9 @@ MonoBehaviour:
   _authorSeparatorColor: {r: 0.67058825, g: 0.7882353, b: 1, a: 1}
   _selectLineStartColor: {r: 0.33999997, g: 0.5734147, b: 1, a: 1}
   _selectLineColor: {r: 0.84000003, g: 0.89894736, b: 1, a: 1}
+  _randomStartColor: {r: 0.5062116, g: 0.3136941, b: 0.7921569, a: 1}
+  _randomChancesStartColor: {r: 0.3975528, g: 0.13044704, b: 0.792, a: 1}
+  _randomChancesColor: {r: 0.6511971, g: 0.41500002, b: 1, a: 1}
   _invokeMethodStartColor: {r: 0.27450982, g: 0.49019608, b: 0.6745098, a: 1}
   _invokeMethodColor: {r: 0.40697676, g: 0.7267441, b: 1, a: 1}
   _booleanParamColor: {r: 1, g: 0.4481132, b: 0.8436321, a: 1}

@@ -55,5 +55,10 @@ namespace MiguelGameDev.DialogueSystem.Editor
         {
             //
         }
+
+        public void SelectBranch(IBranch branch)
+        {
+            //
+        }
     }
 }

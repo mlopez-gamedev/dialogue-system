@@ -2,7 +2,6 @@
 namespace MiguelGameDev.DialogueSystem.Editor
 {
     public readonly struct HighlightSelectBranch
-
     {
         public string SelectHighlightedText { get; }
         public IBranch Branch { get; }

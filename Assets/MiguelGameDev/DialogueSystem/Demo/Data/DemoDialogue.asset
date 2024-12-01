@@ -15,15 +15,16 @@ MonoBehaviour:
   _text: "~ Start\n// Esto es un comentario\nel comentario sigue en la siguiente
     l\xEDnea hasta que no se introduce un nuevo comando\n// Aunque lo recomendable
     es usar \"//\" en cada l\xEDnea\n// Los comentarios son ignorados por el runtime\n-
-    Yo: Hola\n- Alguien an\xF3nimo dice algo\n* Contestas una cosa\n\t- Paco: Pues
-    no\n\t- Miguel: Pues s\xED\n\t- Pepe: Nanai\n\t- Paco: Otra subrama\n\t* Di A\n\t\t-
-    Somebody: Dijiste A\n\t* Di B\n\t\t- Lala: Dijiste B\n\t\t* Otra m\xE1s\n\t\t\t-
-    Hola\n\t\t* Lalala\n\t\t\t- Alguien: Adi\xF3s\n* Contin\xFAa la historia directamente\n*
-    Contestas otra cosa\n\t- Pepe: Vale\n\tdo DoSomething(false, 1.5, \"aString\")\n\t=>
-    End\n* Le das 1.000.000\u20AC [disabled]\n- Paco: Hola dasdas dssssas\ndo DoSomething(true,
-    2.5, \"someString\")\n- Miguel: lalalalasssssssasssssssssssasdasasasas dsdsadsad
-    sadsa d sad sadsadsadsadsadsadsadsa sasasa s as as a s as as a sa s a sa s as
-    a sa s a sa s as as a s as a s as as a sa s as asasjjdkjaslkdjsakljdsad\n- Una
-    pregunta de una sola respuesta\n* Una sola opci\xF3n\n\t- Una sola respuesta\n-
-    Multil\xEDnea: Qu\xE9 dicessssssssssss!!\nsasasasalskalkslakssasdsadsad\nsdsadsadsadsadsadsadsadsa\n=>
+    Yo: Hola\n- Alguien an\xF3nimo dice algo\n~ Hello\nrand\n%50\n\t- Hola!\n%50\n\t-
+    Howdy, friend!\n- \xBFLo intentamos otra vez?\n* S\xED\n\t=> Hello\n*No\n- \xBFPues
+    qu\xE9 tal?\n* Contestas una cosa\n\t- Paco: Pues no\n\t- Miguel: Pues s\xED\n\t-
+    Pepe: Nanai\n\t- Paco: Otra subrama\n\t* Di A\n\t\t- Somebody: Dijiste A\n\t*
+    Di B\n\t\t-  Lala: Dijiste B\n\t\t* Otra m\xE1s\n\t\t\t- Pues s\xED\n\t\t* Lalala\n\t\t\t-
+    Alguien: Adi\xF3s\n* Contin\xFAa la historia directamente\n* Contestas otra cosa\n\t-
+    Pepe: Vale\n\tdo DoSomething(false, 1.5, \"aString\")\n\t=> End\n* Le das 1.000.000\u20AC
+    [disable]\n- Paco: Hola dasdas dssssas\ndo DoSomething(true, 2.5, \"someString\")\n-
+    Miguel: lalalalasssssssasssssssssssasdasasasas dsdsadsad sadsa d sad sadsadsadsadsadsadsadsa
+    sasasa s as as a s as as a sa s a sa s as a sa s a sa s as as a s as a s as as
+    a sa s as asasjjdkjaslkdjsakljdsad\n- Una pregunta de una sola respuesta\n* Una
+    sola opci\xF3n\n\t- Una sola respuesta\n- Multil\xEDnea: Qu\xE9 dicessssssssssss!!\nsasasasalskalkslakssasdsadsad\nsdsadsadsadsadsadsadsadsa\n=>
     Start\n~ End\n- Y se acab\xF3"

@@ -34,7 +34,6 @@ namespace MiguelGameDev.DialogueSystem
         {
             foreach (var command in _commandQueue)
             {
-                Debug.Log($"command: {command}");
                 command.CreateBranches(this);
             }
         }
@@ -75,7 +74,6 @@ namespace MiguelGameDev.DialogueSystem
 
         public void Start()
         {
-            Debug.Log("Branch.Start");
             _currentCommandIndex = 0;
             ExecuteCurrentCommand(_currentCommandIndex);
         }
@@ -123,12 +121,11 @@ namespace MiguelGameDev.DialogueSystem
             {
                 if (IsMain)
                 {
-                    Debug.Log("Dialogue end");
                     _dialogue.End();
                     return;
                 }
-                Debug.Log("Parent next");
-                _parent.Next();
+
+                _dialogue.SelectBranch(_parent);
                 return;
             }
 

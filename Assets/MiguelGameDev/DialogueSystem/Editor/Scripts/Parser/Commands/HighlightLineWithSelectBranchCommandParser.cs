@@ -12,7 +12,6 @@ namespace MiguelGameDev.DialogueSystem.Editor
         public override string StartsWith => "- ";
         public const string AuthorSeparatorPattern = @"(?<!\\): ";
         public const string SelectionSplitter = "*";
-        private readonly char[] MessageTrim = new char[] { ' ', '\n' };
 
         private HighlightBranchParser _branchParser;
         private readonly IHighlightLineWithSelectBranchCommandFactory _highlightSelectLineCommandFactory;
@@ -66,7 +65,6 @@ namespace MiguelGameDev.DialogueSystem.Editor
             for (int i = 1; i < lineAndBranches.Length; ++i)
             {
                 var splits = lineAndBranches[i].Split(GetBranchSplitter(commandPath.Level + 1));
-
                 //var highlightedSelector = GetBranchStarts(commandPath.Level);
                 var highlightedSelector = HighlightSelector(splits[0], commandPath.Level);
                 

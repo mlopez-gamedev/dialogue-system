@@ -23,7 +23,6 @@ namespace MiguelGameDev.DialogueSystem.Commands
 
         public void Setup(IDialogue dialogue, IBranch branch)
         {
-            UnityEngine.Debug.Log($"Setup: {dialogue}");
             _dialogue = dialogue;
             _dialogue.RegisterTitle(_title, _commandPath);
         }

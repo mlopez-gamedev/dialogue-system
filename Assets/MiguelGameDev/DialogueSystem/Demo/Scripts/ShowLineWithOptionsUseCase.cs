@@ -2,7 +2,7 @@
 
 namespace MiguelGameDev.DialogueSystem.Demo
 {
-    public class ShowLineWithOptionsUseCase : IShowLineWithSelectBranchUseCase
+    public class ShowLineWithOptionsUseCase : IShowLineWithOptionsUseCase
     {
         private readonly LineWithOptionsView _lineWithOptionsView;
 
@@ -11,7 +11,7 @@ namespace MiguelGameDev.DialogueSystem.Demo
             _lineWithOptionsView = lineWithOptionsView;
         }
 
-        public void ShowLineWithSelectBranch(Line line, SelectBranch[] selectBranches)
+        public void ShowLineWithOptions(Line line, SelectBranch[] selectBranches)
         {
             _lineWithOptionsView.SetLine(line, selectBranches);
         }

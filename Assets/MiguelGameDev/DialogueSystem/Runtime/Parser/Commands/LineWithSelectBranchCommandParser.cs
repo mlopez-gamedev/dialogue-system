@@ -61,7 +61,6 @@ namespace MiguelGameDev.DialogueSystem.Parser.Command
                 return new Line(message, metadata);
             }
 
-
             var author = Regex.Unescape(lineCommand.Substring(0, match.Index));
             var line = Regex.Unescape(lineCommand.Substring(match.Index + match.Length).Trim(MessageTrim));
             (message, metadata, _) = SplitMessageAndMetadata(line);
@@ -89,12 +88,12 @@ namespace MiguelGameDev.DialogueSystem.Parser.Command
 
         private string GetSelectionSplitter(int level)
         {
-            var selectionbSplitter = "\n";
+            var selectionSplitter = "\n";
             for (int i = 0; i < level; i++)
             {
-                selectionbSplitter += BranchPrefix;
+                selectionSplitter += BranchPrefix;
             }
-            return selectionbSplitter + SelectionSplitter;
+            return selectionSplitter + SelectionSplitter;
         }
     }
 }

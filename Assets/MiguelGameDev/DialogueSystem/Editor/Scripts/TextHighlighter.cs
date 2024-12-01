@@ -15,6 +15,7 @@ namespace MiguelGameDev.DialogueSystem.Editor
         private IHighlightLineWithSelectBranchCommandFactory _highlightSelectLineCommandFactory;
         private IHighlightTitleCommandFactory _highlightTitleCommandFactory;
         private IHighlightGoToCommandFactory _highlightGoToCommandFactory;
+        private IHighlightRandomBranchCommandFactory _highlightRandomBranchCommandFactory;
 
         private HighlightDialogueParser _dialogueParser;
 
@@ -29,6 +30,7 @@ namespace MiguelGameDev.DialogueSystem.Editor
             _highlightSelectLineCommandFactory = new HighlightLineWithSelectBranchCommandFactory(_stringBuilder);
             _highlightTitleCommandFactory = new HighlightTitleCommandFactory(_stringBuilder, _style);
             _highlightGoToCommandFactory = new HighlightGoToCommandFactory(_stringBuilder, _style);
+            _highlightRandomBranchCommandFactory = new HighlightRandomBranchCommandFactory(_stringBuilder);
 
             var branchParser = new HighlightBranchParser();
             var baseParser = CreateParserChainOfResponsability(branchParser);
@@ -56,6 +58,7 @@ namespace MiguelGameDev.DialogueSystem.Editor
             var titleCommandParser = new HighlightTitleParser(_highlightTitleCommandFactory, _style);
             var goToCommandParser = new HighlightGoToCommandParser(_highlightGoToCommandFactory, _style);
             var invokeMethodCommandParser = new HighlightInvokeMethodCommandParser(_highlightCommandFactory, _style);
+            var randomBranchCommandParser = new HighlightRandomBranchCommandParser(_highlightRandomBranchCommandFactory, branchParser, _style);
             var commentParser = new HighlightCommentParser(_highlightCommandFactory, _style);
             var defaultParser = new DefaultHighlightParser(_highlightCommandFactory, _style);
             var notFoundParser = new NotFoundHighlightParser(_highlightCommandFactory, _style);
@@ -64,7 +67,8 @@ namespace MiguelGameDev.DialogueSystem.Editor
             lineCommandParser.SetNextParser(titleCommandParser);
             titleCommandParser.SetNextParser(goToCommandParser);
             goToCommandParser.SetNextParser(invokeMethodCommandParser);
-            invokeMethodCommandParser.SetNextParser(commentParser);
+            invokeMethodCommandParser.SetNextParser(randomBranchCommandParser);
+            randomBranchCommandParser.SetNextParser(commentParser);
             commentParser.SetNextParser(defaultParser);
             defaultParser.SetNextParser(notFoundParser);
 

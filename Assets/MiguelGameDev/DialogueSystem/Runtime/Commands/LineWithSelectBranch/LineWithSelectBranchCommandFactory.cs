@@ -5,16 +5,16 @@ namespace MiguelGameDev.DialogueSystem.Commands
 {
     public class LineWithSelectBranchCommandFactory : ILineWithSelectBranchCommandFactory
     {
-        private readonly IShowLineWithSelectBranchUseCase _showLineWithSelectBranchUseCase;
+        private readonly IShowLineWithOptionsUseCase _showLineWithOptionsUseCase;
 
-        public LineWithSelectBranchCommandFactory(IShowLineWithSelectBranchUseCase showLineWithSelectBranchUseCase)
+        public LineWithSelectBranchCommandFactory(IShowLineWithOptionsUseCase _showLineWithOptionsUseCase)
         {
-            _showLineWithSelectBranchUseCase = showLineWithSelectBranchUseCase;
+            this._showLineWithOptionsUseCase = _showLineWithOptionsUseCase;
         }
 
         public IDialogueCommand CreateLineWithSelectBranchCommand(Line line, SelectBranchInfo[] selectBranchInfos)
         {
-            return new LineWithSelectBranchCommand(_showLineWithSelectBranchUseCase, line, selectBranchInfos);
+            return new LineWithSelectBranchCommand(_showLineWithOptionsUseCase, line, selectBranchInfos);
         }
     }
 

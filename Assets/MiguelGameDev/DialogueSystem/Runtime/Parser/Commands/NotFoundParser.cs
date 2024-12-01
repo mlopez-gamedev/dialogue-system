@@ -2,7 +2,6 @@
 
 namespace MiguelGameDev.DialogueSystem.Parser.Command
 {
-
     public class NotFoundParser : CommandParser
     {
         public override string StartsWith => null;

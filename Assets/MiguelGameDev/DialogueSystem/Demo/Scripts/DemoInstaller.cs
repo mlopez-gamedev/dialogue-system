@@ -31,7 +31,6 @@ namespace MiguelGameDev.DialogueSystem.Demo
 
             dialogue.OnDialogueEnd += Dialogue_OnDialogueEnd;
             dialogue.Start();
-            Debug.Log("Dialogue Start");
         }
 
         private void Dialogue_OnDialogueEnd()

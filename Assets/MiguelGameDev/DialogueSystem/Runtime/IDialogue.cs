@@ -7,6 +7,7 @@
         void Start();
         void Next();
         void SelectBranch(int branchIndex);
+        void SelectBranch(IBranch branch);
         void End();
         void RegisterTitle(string title, CommandPath commandPath);
         CommandPath GetTitlePath(string title);
