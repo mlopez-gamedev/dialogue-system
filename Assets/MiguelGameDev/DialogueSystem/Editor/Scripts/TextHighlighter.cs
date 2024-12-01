@@ -2,11 +2,13 @@
 using MiguelGameDev.DialogueSystem.Parser.Command;
 using MiguelGameDev.DialogueSystem.Parser;
 using System.Text;
+using UnityEngine;
 
 namespace MiguelGameDev.DialogueSystem.Editor
 {
     public class TextHighlighter
     {
+        private const string PackageHighlightStylePath = "Packages/com.miguelgamedev.dialoguesystem/Editor/Config/HighlightStyle.asset";
         private const string HighlightStylePath = "Assets/MiguelGameDev/DialogueSystem/Editor/Config/HighlightStyle.asset";
 
         private HighlightStyle _style;
@@ -24,6 +26,23 @@ namespace MiguelGameDev.DialogueSystem.Editor
         public TextHighlighter()
         {
             _style = AssetDatabase.LoadAssetAtPath<HighlightStyle>(HighlightStylePath);
+            if (_style == null)
+            {
+                _style = AssetDatabase.LoadAssetAtPath<HighlightStyle>(PackageHighlightStylePath);
+                // if (style == null)
+                // {
+                //     Debug.LogError("Can't load style");
+                //     return;
+                // }
+                // AssetDatabase.CreateFolder()
+                // AssetDatabase.CreateAsset(style, HighlightStylePath);
+                // _style = AssetDatabase.LoadAssetAtPath<HighlightStyle>(HighlightStylePath);
+                // if (_style == null)
+                // {
+                //     Debug.LogError("Can't copy style");
+                //     return;
+                // }
+            }
             _stringBuilder = new StringBuilder();
 
             _highlightCommandFactory = new HighlightCommandFactory(_stringBuilder);

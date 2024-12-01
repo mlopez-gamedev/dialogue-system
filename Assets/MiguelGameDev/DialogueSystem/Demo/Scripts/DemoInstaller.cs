@@ -18,7 +18,7 @@ namespace MiguelGameDev.DialogueSystem.Demo
             var showLineUseCase = new ShowLineUseCase(_lineView);
             var showLineWithOptionsUseCase = new ShowLineWithOptionsUseCase(_lineWithOptionsView);
 
-            var dialogueContext = new DialogueContext();
+            var dialogueContext = new DemoDialogueContext();
             var dialogueInstaller = new DialogueParserInstaller(dialogueContext, showLineUseCase, showLineWithOptionsUseCase);
             var dialogueParser = dialogueInstaller.Install();
             var dialogue = dialogueParser.Parse(_dialogueText.Text);
