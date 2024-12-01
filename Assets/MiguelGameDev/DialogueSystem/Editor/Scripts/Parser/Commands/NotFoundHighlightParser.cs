@@ -5,16 +5,15 @@ using UnityEngine;
 
 namespace MiguelGameDev.DialogueSystem.Editor
 {
-
-    public class DefaultHighlightParser : CommandParser
+    public class NotFoundHighlightParser : CommandParser
     {
         public override string StartsWith => string.Empty;
         private readonly IHighlightCommandFactory _highlightCommandFactory;
-        
+
         private readonly string _wrongTextColor;
         private readonly string _errorColor;
-
-        public DefaultHighlightParser(IHighlightCommandFactory highlightCommandFactory, HighlightStyle style)
+        
+        public NotFoundHighlightParser(IHighlightCommandFactory highlightCommandFactory, HighlightStyle style)
         {
             _highlightCommandFactory = highlightCommandFactory;
             _wrongTextColor = "#" + ColorUtility.ToHtmlStringRGB(style.WrongTextColor);
@@ -23,17 +22,9 @@ namespace MiguelGameDev.DialogueSystem.Editor
 
         protected override bool TryParse(string lineCommand, CommandPath commandPath, out IDialogueCommand command)
         {
-            if (lineCommand.Length > 0 && lineCommand[0] == '\n')
-            {
-                command = null;
-                return false;
-            }
-
-            UnityEngine.Debug.Log("DefaultHighlightParser: " + lineCommand);
+            lineCommand = $"<color={_wrongTextColor}><i>{lineCommand.TrimStart('\n')}</i></color> <color={_errorColor}>(this will be ignored)</color>";
             
-            var highlightedText = GetBranchStarts(commandPath.Level);
-            lineCommand = $"<color={_wrongTextColor}><i>{lineCommand}</i></color> <color={_errorColor}>(this will be ignored)</color>";
-            highlightedText += Regex.Unescape(lineCommand);
+            var highlightedText = Regex.Unescape(lineCommand);
 
             command = _highlightCommandFactory.CreateHighlightCommand(highlightedText);
             return true;

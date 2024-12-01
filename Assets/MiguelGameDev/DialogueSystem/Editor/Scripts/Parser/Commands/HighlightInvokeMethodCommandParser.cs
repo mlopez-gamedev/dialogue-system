@@ -42,7 +42,7 @@ namespace MiguelGameDev.DialogueSystem.Editor
                 return false;
             }
 
-            var highlightedText = string.Empty.PadRight(commandPath.Level, '\t');
+            var highlightedText = GetBranchStarts(commandPath.Level);
             highlightedText += HighlightText(lineCommand);
             command = _highlightCommandFactory.CreateHighlightCommand(highlightedText);
             return true;
@@ -99,10 +99,10 @@ namespace MiguelGameDev.DialogueSystem.Editor
                 highlightedCommand += $"<color={_invokeMethodColor}>{lineCommand}</color>";
             }
 
-            //for (int i = 1; i < lines.Length; ++i)
-            //{
-            //    highlightedCommand += $"\n<color={_wrongTextColor}><i>{Regex.Unescape(lines[i])}</i></color> <color={_errorColor}>(this will be ignored)</color>";
-            //}
+            for (int i = 1; i < lines.Length; ++i)
+            {
+                highlightedCommand += $"\n<color={_wrongTextColor}><i>{Regex.Unescape(lines[i])}</i></color> <color={_errorColor}>(this will be ignored)</color>";
+            }
 
             return highlightedCommand;
         }

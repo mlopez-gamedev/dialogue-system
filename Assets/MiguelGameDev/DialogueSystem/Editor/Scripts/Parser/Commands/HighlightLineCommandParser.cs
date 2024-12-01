@@ -18,6 +18,8 @@ namespace MiguelGameDev.DialogueSystem.Editor
         private readonly string _authorSeparatorColor;
         private readonly string _metadataColor;
         private readonly string _metadataSeparatorColor;
+        private readonly string _wrongTextColor;
+        private readonly string _errorColor;
 
         public HighlightLineCommandParser(IHighlightCommandFactory highlightCommandFactory, HighlightStyle style)
         {
@@ -27,6 +29,8 @@ namespace MiguelGameDev.DialogueSystem.Editor
             _authorSeparatorColor = "#" + ColorUtility.ToHtmlStringRGB(style.AuthorSeparatorColor);
             _metadataColor = "#" + ColorUtility.ToHtmlStringRGB(style.MetadataColor);
             _metadataSeparatorColor = "#" + ColorUtility.ToHtmlStringRGB(style.MetadataSeparatorColor);
+            _wrongTextColor = "#" + ColorUtility.ToHtmlStringRGB(style.WrongTextColor);
+            _errorColor = "#" + ColorUtility.ToHtmlStringRGB(style.ErrorColor);
         }
 
         protected override bool TryParse(string lineCommand, CommandPath commandPath, out IDialogueCommand command)
@@ -37,7 +41,7 @@ namespace MiguelGameDev.DialogueSystem.Editor
                 return false;
             }
 
-            var highlightedText = string.Empty.PadRight(commandPath.Level, '\t');
+            var highlightedText = GetBranchStarts(commandPath.Level);
             highlightedText += HighlightText(lineCommand);
             command = _highlightCommandFactory.CreateHighlightCommand(highlightedText);
             return true;
@@ -49,16 +53,20 @@ namespace MiguelGameDev.DialogueSystem.Editor
             lineCommand = lineCommand.Substring(StartsWith.Length);
             
             string highlightedLine;
-            string message, metadata;
+            string message, metadata, nextLine;
             var match = Regex.Match(lineCommand, AuthorSeparatorPattern);
 
             if (!match.Success)
             {
-                (message, metadata) = SplitMessageAndMetadata(lineCommand);
+                (message, metadata, nextLine) = SplitMessageAndMetadata(lineCommand);
                 highlightedLine = message;
                 if (!string.IsNullOrEmpty(metadata))
                 {
-                    highlightedLine += $" <b><color={_metadataSeparatorColor}>[</color></b><color={_metadataColor}>{metadata}</color><b><color={_metadataSeparatorColor}>]</color></b>"; 
+                    highlightedLine += $" <b><color={_metadataSeparatorColor}>[</color></b><color={_metadataColor}>{metadata}</color><b><color={_metadataSeparatorColor}>]</color></b>";
+                    if (!string.IsNullOrEmpty(nextLine))
+                    {
+                        highlightedLine += $"<color={_wrongTextColor}><i>{nextLine}</i></color> <color={_errorColor}>(you cannot add text after metadata)</color>";
+                    }   
                 }
                 
                 highlightedCommand += Regex.Unescape(highlightedLine);
@@ -68,15 +76,14 @@ namespace MiguelGameDev.DialogueSystem.Editor
 
             var author = Regex.Unescape(lineCommand.Substring(0, match.Index));
             var line = Regex.Unescape(lineCommand.Substring(match.Index + match.Length));
-            (message, metadata) = SplitMessageAndMetadata(line);
+            (message, metadata, nextLine) = SplitMessageAndMetadata(line);
             highlightedLine = message;
             if (!string.IsNullOrEmpty(metadata))
             {
-                highlightedLine += $" <b><color={_metadataSeparatorColor}>[</color></b><color={_metadataColor}>{metadata}</color><b><color={_metadataSeparatorColor}>]</color></b>"; 
+                highlightedLine += $" <b><color={_metadataSeparatorColor}>[</color></b><color={_metadataColor}>{metadata}</color><b><color={_metadataSeparatorColor}>]</color></b>{nextLine}"; 
             }
-
-
-            highlightedCommand += $"<color={_authorColor}>{author}></color><color={_authorSeparatorColor}>:</color> {highlightedLine}";
+            
+            highlightedCommand += $"<color={_authorColor}>{author}</color><color={_authorSeparatorColor}>:</color> {highlightedLine}";
 
             return highlightedCommand;
         }

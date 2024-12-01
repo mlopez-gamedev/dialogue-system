@@ -57,7 +57,8 @@ namespace MiguelGameDev.DialogueSystem.Editor
             var goToCommandParser = new HighlightGoToCommandParser(_highlightGoToCommandFactory, _style);
             var invokeMethodCommandParser = new HighlightInvokeMethodCommandParser(_highlightCommandFactory, _style);
             var commentParser = new HighlightCommentParser(_highlightCommandFactory, _style);
-            var defaultParser = new DefaultHighlightParser(_highlightCommandFactory);
+            var defaultParser = new DefaultHighlightParser(_highlightCommandFactory, _style);
+            var notFoundParser = new NotFoundHighlightParser(_highlightCommandFactory, _style);
 
             selectionLineCommandParser.SetNextParser(lineCommandParser);
             lineCommandParser.SetNextParser(titleCommandParser);
@@ -65,6 +66,7 @@ namespace MiguelGameDev.DialogueSystem.Editor
             goToCommandParser.SetNextParser(invokeMethodCommandParser);
             invokeMethodCommandParser.SetNextParser(commentParser);
             commentParser.SetNextParser(defaultParser);
+            defaultParser.SetNextParser(notFoundParser);
 
             return selectionLineCommandParser;
         }

@@ -12,7 +12,6 @@ namespace MiguelGameDev.DialogueSystem.Editor
         public override string StartsWith => "- ";
         public const string AuthorSeparatorPattern = @"(?<!\\): ";
         public const string SelectionSplitter = "*";
-        public const string BranchSplitter = "\t";
         private readonly char[] MessageTrim = new char[] { ' ', '\n' };
 
         private HighlightBranchParser _branchParser;
@@ -25,6 +24,8 @@ namespace MiguelGameDev.DialogueSystem.Editor
         private readonly string _metadataSeparatorColor;
         private readonly string _selectionLineStartWithColor;
         private readonly string _selectionLineTextColor;
+        private readonly string _wrongTextColor;
+        private readonly string _errorColor;
 
         public HighlightLineWithSelectBranchCommandParser(IHighlightLineWithSelectBranchCommandFactory highlightSelectLineCommandFactory, HighlightBranchParser branchParser, HighlightStyle style)
         {
@@ -38,6 +39,8 @@ namespace MiguelGameDev.DialogueSystem.Editor
             _metadataSeparatorColor = "#" + ColorUtility.ToHtmlStringRGB(style.MetadataSeparatorColor);
             _selectionLineStartWithColor = "#" + ColorUtility.ToHtmlStringRGB(style.SelectLineStartColor);
             _selectionLineTextColor = "#" + ColorUtility.ToHtmlStringRGB(style.SelectLineColor);
+            _wrongTextColor = "#" + ColorUtility.ToHtmlStringRGB(style.WrongTextColor);
+            _errorColor = "#" + ColorUtility.ToHtmlStringRGB(style.ErrorColor);
         }
 
         protected override bool TryParse(string lineCommand, CommandPath commandPath, out IDialogueCommand command)
@@ -48,7 +51,7 @@ namespace MiguelGameDev.DialogueSystem.Editor
                 return false;
             }
 
-            var lineAndBranches = lineCommand.Split(GetSelectionSplitter(commandPath.Level), System.StringSplitOptions.RemoveEmptyEntries);
+            var lineAndBranches = lineCommand.Split(GetSelectionSplitter(commandPath.Level));
 
             if (lineAndBranches.Length < 2)
             {
@@ -62,7 +65,7 @@ namespace MiguelGameDev.DialogueSystem.Editor
             var branchSelectors = new HighlightSelectBranch[lineAndBranches.Length - 1];
             for (int i = 1; i < lineAndBranches.Length; ++i)
             {
-                var splits = lineAndBranches[i].Split(GetBranchSplitter(commandPath.Level));
+                var splits = lineAndBranches[i].Split(GetBranchSplitter(commandPath.Level + 1));
 
                 //var highlightedSelector = GetBranchStarts(commandPath.Level);
                 var highlightedSelector = HighlightSelector(splits[0], commandPath.Level);
@@ -88,16 +91,20 @@ namespace MiguelGameDev.DialogueSystem.Editor
             lineCommand = lineCommand.Substring(StartsWith.Length);
 
             string highlightedLine;
-            string message, metadata;
+            string message, metadata, nextLine;
             var match = Regex.Match(lineCommand, AuthorSeparatorPattern);
 
             if (!match.Success)
             {
-                (message, metadata) = SplitMessageAndMetadata(lineCommand);
+                (message, metadata, nextLine) = SplitMessageAndMetadata(lineCommand);
                 highlightedLine = message;
                 if (!string.IsNullOrEmpty(metadata))
                 {
-                    highlightedLine += $" <color={_metadataSeparatorColor}>[</color><color={_metadataColor}>{metadata}</color><color={_metadataSeparatorColor}>]</color>"; 
+                    highlightedLine += $" <color={_metadataSeparatorColor}>[</color><color={_metadataColor}>{metadata}</color><color={_metadataSeparatorColor}>]</color>";
+                    if (!string.IsNullOrEmpty(nextLine))
+                    {
+                        highlightedLine += $"<color={_wrongTextColor}><i>{nextLine}</i></color> <color={_errorColor}>(you cannot add text after metadata)</color>";
+                    }   
                 }
                 
                 highlightedCommand += Regex.Unescape(highlightedLine);
@@ -107,11 +114,15 @@ namespace MiguelGameDev.DialogueSystem.Editor
 
             var author = Regex.Unescape(lineCommand.Substring(0, match.Index));
             var line = Regex.Unescape(lineCommand.Substring(match.Index + match.Length));
-            (message, metadata) = SplitMessageAndMetadata(line);
+            (message, metadata, nextLine) = SplitMessageAndMetadata(line);
             highlightedLine = message;
             if (!string.IsNullOrEmpty(metadata))
             {
-                highlightedLine += $" <color={_metadataSeparatorColor}>[</color><color={_metadataColor}>{metadata}</color><color={_metadataSeparatorColor}>]</color>"; 
+                highlightedLine += $" <color={_metadataSeparatorColor}>[</color><color={_metadataColor}>{metadata}</color><color={_metadataSeparatorColor}>]</color>{nextLine}"; 
+                if (!string.IsNullOrEmpty(nextLine))
+                {
+                    highlightedLine += $"<color={_wrongTextColor}><i>{nextLine}</i></color> <color={_errorColor}>(you cannot add text after metadata)</color>";
+                }   
             }
 
             highlightedCommand += $"<color={_authorColor}>{author}</color><color={_authorSeparatorColor}>:</color> {highlightedLine}";
@@ -123,11 +134,15 @@ namespace MiguelGameDev.DialogueSystem.Editor
         {
             string highlightedCommand = $"<b><color={_selectionLineStartWithColor}>{GetSelectionSplitter(level)}</color></b>";
 
-            var (message, metadata) = SplitMessageAndMetadata(selectionCommand);
+            var (message, metadata, nextLine) = SplitMessageAndMetadata(selectionCommand);
             var highlightedLine =  $"<color={_selectionLineTextColor}>{message}</color>";;
             if (!string.IsNullOrEmpty(metadata))
             {
-                highlightedLine += $" <color={_metadataSeparatorColor}>[</color><color={_metadataColor}>{metadata}</color><color={_metadataSeparatorColor}>]</color>"; 
+                highlightedLine += $" <color={_metadataSeparatorColor}>[</color><color={_metadataColor}>{metadata}</color><color={_metadataSeparatorColor}>]</color>";
+                if (!string.IsNullOrEmpty(nextLine))
+                {
+                    highlightedLine += $"<color={_wrongTextColor}><i>{nextLine}</i></color> <color={_errorColor}>(you cannot add text after metadata)</color>";
+                }   
             }
             
             highlightedCommand += highlightedLine;
@@ -137,32 +152,12 @@ namespace MiguelGameDev.DialogueSystem.Editor
 
         private string GetSelectionSplitter(int level)
         {
-            var selectionbSplitter = "\n";
+            var selectionSplitter = "\n";
             for (int i = 0; i < level; i++)
             {
-                selectionbSplitter += BranchSplitter;
+                selectionSplitter += BranchPrefix;
             }
-            return selectionbSplitter + SelectionSplitter;
-        }
-
-        private string GetBranchSplitter(int level)
-        {
-            var branchSplitter = "\n" + BranchSplitter;
-            for (int i = 0; i < level; i++)
-            {
-                branchSplitter += BranchSplitter;
-            }
-            return branchSplitter;
-        }
-
-        private string GetBranchStarts(int level)
-        {
-            var branchSplitter = "";
-            for (int i = 0; i < level; i++)
-            {
-                branchSplitter += BranchSplitter;
-            }
-            return branchSplitter;
+            return selectionSplitter + SelectionSplitter;
         }
     }
 

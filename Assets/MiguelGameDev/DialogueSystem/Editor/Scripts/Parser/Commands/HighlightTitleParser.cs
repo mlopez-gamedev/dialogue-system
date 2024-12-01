@@ -12,12 +12,16 @@ namespace MiguelGameDev.DialogueSystem.Editor
 
         private readonly string _startWithColor;
         private readonly string _titleColor;
+        private readonly string _wrongTextColor;
+        private readonly string _errorColor;
 
         public HighlightTitleParser(IHighlightTitleCommandFactory highlightCommandFactory, HighlightStyle style)
         {
             _highlightCommandFactory = highlightCommandFactory;
             _startWithColor = "#" + ColorUtility.ToHtmlStringRGB(style.TitleStartColor);
             _titleColor = "#" + ColorUtility.ToHtmlStringRGB(style.TitleColor);
+            _wrongTextColor = "#" + ColorUtility.ToHtmlStringRGB(style.WrongTextColor);
+            _errorColor = "#" + ColorUtility.ToHtmlStringRGB(style.ErrorColor);
         }
 
         protected override bool TryParse(string lineCommand, CommandPath commandPath, out IDialogueCommand command)
@@ -28,7 +32,7 @@ namespace MiguelGameDev.DialogueSystem.Editor
                 return false;
             }
 
-            var highlightedText = string.Empty.PadRight(commandPath.Level, '\t');
+            var highlightedText = GetBranchStarts(commandPath.Level);
             highlightedText += HighlightText(lineCommand, out var title);
 
             command = _highlightCommandFactory.CreateHighlightCommand(title, commandPath, highlightedText);
@@ -44,7 +48,10 @@ namespace MiguelGameDev.DialogueSystem.Editor
             var lines = lineCommand.Split("\n");
             title = Regex.Unescape(lines[0]);
             highlightedCommand += $"<color={_titleColor}>{title}</color>";
-
+            for (int i = 1; i < lines.Length; ++i)
+            {
+                highlightedCommand += $"\n<color={_wrongTextColor}><i>{Regex.Unescape(lines[i])}</i></color> <color={_errorColor}>(this will be ignored)</color>";
+            }
             return highlightedCommand;
         }
     }

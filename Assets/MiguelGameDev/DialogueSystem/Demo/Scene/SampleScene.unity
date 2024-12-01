@@ -1029,6 +1029,52 @@ MonoBehaviour:
   _authorText: {fileID: 555695196}
   _messageText: {fileID: 316808603}
   _nextButton: {fileID: 307899972}
+--- !u!1 &873432536
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 873432538}
+  - component: {fileID: 873432537}
+  m_Layer: 0
+  m_Name: CodeExample
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &873432537
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 873432536}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c766635a54c53f04bb9c44ec51ebbeea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  code: "// code\nfor (int i = 0; i < 50; ++i) {\n    var a = 125;\n    string a
+    = \"hola\"\n    \n}\n// foo\n// bar"
+--- !u!4 &873432538
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 873432536}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 530.54785, y: 213.57161, z: -3.4232452}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1025696815
 GameObject:
   m_ObjectHideFlags: 0
@@ -1482,3 +1528,4 @@ SceneRoots:
   - {fileID: 1718796885}
   - {fileID: 352424717}
   - {fileID: 1025696818}
+  - {fileID: 873432538}

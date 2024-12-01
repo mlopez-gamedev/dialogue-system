@@ -38,13 +38,13 @@ namespace MiguelGameDev.DialogueSystem.Parser.Command
             
             if (!match.Success)
             {
-                (message, metadata) = SplitMessageAndMetadata(lineCommand);
+                (message, metadata, _) = SplitMessageAndMetadata(lineCommand);
                 return new Line(message, metadata);
             }
 
             var author = Regex.Unescape(lineCommand.Substring(0, match.Index));
             var line = Regex.Unescape(lineCommand.Substring(match.Index + match.Length).Trim(MessageTrim));
-            (message, metadata) = SplitMessageAndMetadata(line);
+            (message, metadata, _) = SplitMessageAndMetadata(line);
 
             return new Line(author, message, metadata);
         }

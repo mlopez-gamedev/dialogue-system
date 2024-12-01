@@ -1,6 +1,7 @@
 ﻿using MiguelGameDev.DialogueSystem.Commands;
 using System.Linq;
 using System.Text.RegularExpressions;
+using UnityEngine;
 
 namespace MiguelGameDev.DialogueSystem.Parser.Command
 {
@@ -9,7 +10,6 @@ namespace MiguelGameDev.DialogueSystem.Parser.Command
         public override string StartsWith => "- ";
         public const string AuthorSeparatorPattern = @"(?<!\\): ";
         public const string SelectionSplitter = "*";
-        public const string BranchSplitter = "\t";
         private readonly char[] MessageTrim = new char[] { ' ', '\n' };
 
         private readonly ILineWithSelectBranchCommandFactory _lineWithSelectBranchCommandFactory;
@@ -57,14 +57,14 @@ namespace MiguelGameDev.DialogueSystem.Parser.Command
 
             if (!match.Success)
             {
-                (message, metadata) = SplitMessageAndMetadata(lineCommand);
+                (message, metadata, _) = SplitMessageAndMetadata(lineCommand);
                 return new Line(message, metadata);
             }
 
 
             var author = Regex.Unescape(lineCommand.Substring(0, match.Index));
             var line = Regex.Unescape(lineCommand.Substring(match.Index + match.Length).Trim(MessageTrim));
-            (message, metadata) = SplitMessageAndMetadata(line);
+            (message, metadata, _) = SplitMessageAndMetadata(line);
 
             return new Line(author, message, metadata);
         }
@@ -74,7 +74,7 @@ namespace MiguelGameDev.DialogueSystem.Parser.Command
             var splits = lineCommand.Split(GetBranchSplitter(commandPath.Level));
             var branchPosition = new BranchPosition(commandPath.CommandIndex, branchIndex);
 
-            var (message, metadata) = SplitMessageAndMetadata(splits[0]);
+            var (message, metadata, _) = SplitMessageAndMetadata(splits[0]);
             
             if (splits.Length > 1)
             {
@@ -92,19 +92,9 @@ namespace MiguelGameDev.DialogueSystem.Parser.Command
             var selectionbSplitter = "\n";
             for (int i = 0; i < level; i++)
             {
-                selectionbSplitter += BranchSplitter;
+                selectionbSplitter += BranchPrefix;
             }
             return selectionbSplitter + SelectionSplitter;
-        }
-
-        private string GetBranchSplitter(int level)
-        {
-            var branchSplitter = "\n" + BranchSplitter;
-            for (int i = 0; i < level; i++)
-            {
-                branchSplitter += BranchSplitter;
-            }
-            return branchSplitter;
         }
     }
 }

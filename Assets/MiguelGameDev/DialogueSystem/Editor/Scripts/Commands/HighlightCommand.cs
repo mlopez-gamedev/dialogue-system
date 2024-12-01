@@ -1,6 +1,7 @@
 ﻿using MiguelGameDev.DialogueSystem.Commands;
 using System.Text;
 using System.Text.RegularExpressions;
+using UnityEngine;
 
 namespace MiguelGameDev.DialogueSystem.Editor
 {

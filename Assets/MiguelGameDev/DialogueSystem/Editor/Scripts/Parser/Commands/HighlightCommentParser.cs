@@ -29,7 +29,7 @@ namespace MiguelGameDev.DialogueSystem.Editor
                 return false;
             }
 
-            var highlightedText = string.Empty.PadRight(commandPath.Level, '\t');
+            var highlightedText = GetBranchStarts(commandPath.Level);
             highlightedText += HighlightText(lineCommand);
             command = _highlightCommandFactory.CreateHighlightCommand(highlightedText);
             return true;

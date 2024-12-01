@@ -9,9 +9,9 @@ namespace MiguelGameDev.DialogueSystem.Parser
             _commandsParserStrategy = commandsParserStrategy;
         }
 
-        public IBranch Parse(string text, int index = 0, int tabs = 0, params BranchPosition[] branchPath)
+        public IBranch Parse(string text, int index = 0, int level = 0, params BranchPosition[] branchPath)
         {
-            var commands = _commandsParserStrategy.ParseCommands(text, tabs, branchPath);
+            var commands = _commandsParserStrategy.ParseCommands(text, level, branchPath);
             return new Branch(commands, index, branchPath);
         }
     }
