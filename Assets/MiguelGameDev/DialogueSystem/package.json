@@ -1,0 +1,15 @@
+{
+    "name": "com.miguelgamedev.dialoguesystem",
+    "version": "1.0.0",
+    "displayName": "Dialogue System",
+    "description": "Dialogue System designer friendly based on Godot Dialogue Manager",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/mlopez-gamedev/dialogue-system.git"
+    },
+    "author": {
+        "name": "MiguelGameDev",
+        "email": "mlopez.gamedev@gmail.com",
+        "url": "https://linktr.ee/mlopez.gamedev"
+    }
+}
