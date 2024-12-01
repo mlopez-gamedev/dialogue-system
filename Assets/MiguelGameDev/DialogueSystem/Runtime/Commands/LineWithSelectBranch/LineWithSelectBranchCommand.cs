@@ -24,7 +24,6 @@ namespace MiguelGameDev.DialogueSystem.Commands
             for (int i = 0; i < _selectBranchInfos.Length; ++i)
             {
                 _selectBranches[i] = new SelectBranch(_selectBranchInfos[i].Text, _selectBranchInfos[i].Metadata, _selectBranchInfos[i].BranchPosition.BranchIndex);
-                UnityEngine.Debug.Log($"{_selectBranchInfos[i].Text} => {_selectBranchInfos[i].BranchPosition.BranchIndex}");
                 if (_selectBranchInfos[i].ContinueInCurrentBranch)
                 {
                     continue;
