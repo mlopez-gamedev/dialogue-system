@@ -7,7 +7,6 @@ namespace MiguelGameDev.DialogueSystem.Parser.Command
 {
     public abstract class CommandParser
     {
-        private const string MetadataPattern = @"^(.*?)\s*\[(.*?)\](\n?.*?)?$";
         protected const string BranchPrefix = "\t";
         
         public abstract string StartsWith { get; }
@@ -31,17 +30,6 @@ namespace MiguelGameDev.DialogueSystem.Parser.Command
         }
 
         protected abstract bool TryParse(string lineCommand, CommandPath commandPath, out IDialogueCommand command);
-
-        protected (string, string, string) SplitMessageAndMetadata(string line)
-        {
-            var match = Regex.Match(line, MetadataPattern);
-            if (!match.Success)
-            {
-                return (line, string.Empty, string.Empty);
-            }
-            
-            return (match.Groups[1].Value, match.Groups[2].Value, match.Groups.Count < 3 ? String.Empty : match.Groups[3].Value);
-        }
         
         protected string GetBranchStarts(int level)
         {

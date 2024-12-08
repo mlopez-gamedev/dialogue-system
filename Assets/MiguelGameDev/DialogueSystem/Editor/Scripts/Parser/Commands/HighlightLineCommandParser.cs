@@ -10,7 +10,7 @@ namespace MiguelGameDev.DialogueSystem.Editor
     public class HighlightLineCommandParser : CommandParser
     {
         public override string StartsWith => "- ";
-        public const string AuthorSeparatorPattern = @"(?<!\\): ";
+        public const string LinePattern = @"^(?:(?<author>[^:]+):\s)?(?<message>.*?)(?:\s\[(?<metadata>.+)\])?$";
         private readonly IHighlightCommandFactory _highlightCommandFactory;
         
         private readonly string _startWithColor;
@@ -18,8 +18,6 @@ namespace MiguelGameDev.DialogueSystem.Editor
         private readonly string _authorSeparatorColor;
         private readonly string _metadataColor;
         private readonly string _metadataSeparatorColor;
-        private readonly string _wrongTextColor;
-        private readonly string _errorColor;
 
         public HighlightLineCommandParser(IHighlightCommandFactory highlightCommandFactory, HighlightStyle style)
         {
@@ -29,8 +27,6 @@ namespace MiguelGameDev.DialogueSystem.Editor
             _authorSeparatorColor = "#" + ColorUtility.ToHtmlStringRGB(style.AuthorSeparatorColor);
             _metadataColor = "#" + ColorUtility.ToHtmlStringRGB(style.MetadataColor);
             _metadataSeparatorColor = "#" + ColorUtility.ToHtmlStringRGB(style.MetadataSeparatorColor);
-            _wrongTextColor = "#" + ColorUtility.ToHtmlStringRGB(style.WrongTextColor);
-            _errorColor = "#" + ColorUtility.ToHtmlStringRGB(style.ErrorColor);
         }
 
         protected override bool TryParse(string lineCommand, CommandPath commandPath, out IDialogueCommand command)
@@ -49,43 +45,42 @@ namespace MiguelGameDev.DialogueSystem.Editor
 
         private string HighlightText(string lineCommand)
         {
+            string newLine = string.Empty;
+            if (lineCommand.EndsWith("\n"))
+            {
+                Debug.Log("Ends with \\n!");
+                newLine = "\n";
+            }
+
             string highlightedCommand = $"<b><color={_startWithColor}>{StartsWith}</color></b>";
             lineCommand = lineCommand.Substring(StartsWith.Length);
-            
-            string highlightedLine;
-            string message, metadata, nextLine;
-            var match = Regex.Match(lineCommand, AuthorSeparatorPattern);
+
+            var match = Regex.Match(lineCommand, LinePattern, RegexOptions.Singleline);
 
             if (!match.Success)
             {
-                (message, metadata, nextLine) = SplitMessageAndMetadata(lineCommand);
-                highlightedLine = message;
-                if (!string.IsNullOrEmpty(metadata))
-                {
-                    highlightedLine += $" <b><color={_metadataSeparatorColor}>[</color></b><color={_metadataColor}>{metadata}</color><b><color={_metadataSeparatorColor}>]</color></b>";
-                    if (!string.IsNullOrEmpty(nextLine))
-                    {
-                        highlightedLine += $"<color={_wrongTextColor}><i>{nextLine}</i></color> <color={_errorColor}>(you cannot add text after metadata)</color>";
-                    }   
-                }
-                
-                highlightedCommand += Regex.Unescape(highlightedLine);
+                highlightedCommand += lineCommand;
                 return highlightedCommand;
             }
 
+            string author = Regex.Unescape(match.Groups["author"].Value);
+            string message = Regex.Unescape(match.Groups["message"].Value);
+            string metadata = Regex.Unescape(match.Groups["metadata"].Value);
 
-            var author = Regex.Unescape(lineCommand.Substring(0, match.Index));
-            var line = Regex.Unescape(lineCommand.Substring(match.Index + match.Length));
-            (message, metadata, nextLine) = SplitMessageAndMetadata(line);
-            highlightedLine = message;
+            if (!string.IsNullOrEmpty(author))
+            {
+                highlightedCommand += $"<color={_authorColor}>{author}</color><color={_authorSeparatorColor}>:</color> ";
+                return highlightedCommand + newLine;
+            }
+
+            highlightedCommand += message;
+
             if (!string.IsNullOrEmpty(metadata))
             {
-                highlightedLine += $" <b><color={_metadataSeparatorColor}>[</color></b><color={_metadataColor}>{metadata}</color><b><color={_metadataSeparatorColor}>]</color></b>{nextLine}"; 
+                highlightedCommand += $" <b><color={_metadataSeparatorColor}>[</color></b><color={_metadataColor}>{metadata}</color><b><color={_metadataSeparatorColor}>]</color></b>";
             }
-            
-            highlightedCommand += $"<color={_authorColor}>{author}</color><color={_authorSeparatorColor}>:</color> {highlightedLine}";
 
-            return highlightedCommand;
+            return highlightedCommand + newLine;
         }
     }
 

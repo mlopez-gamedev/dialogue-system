@@ -8,9 +8,9 @@ namespace MiguelGameDev.DialogueSystem.Parser.Command
     public class LineWithSelectBranchCommandParser : CommandParser
     {
         public override string StartsWith => "- ";
-        public const string AuthorSeparatorPattern = @"(?<!\\): ";
+        public const string LinePattern = @"^(?:(?<author>[^:]+):\s)?(?<message>.*?)(?:\s\[(?<metadata>.+)\])?$";
+        public const string OptionPattern = @"^(?<message>.*?)(?:\s\[(?<metadata>.+)\])?$";
         public const string SelectionSplitter = "*";
-        private readonly char[] MessageTrim = new char[] { ' ', '\n' };
 
         private readonly ILineWithSelectBranchCommandFactory _lineWithSelectBranchCommandFactory;
         private readonly BranchParser _branchParser;
@@ -52,18 +52,16 @@ namespace MiguelGameDev.DialogueSystem.Parser.Command
 
         private Line CreateLine(string lineCommand)
         {
-            string message, metadata;
-            var match = Regex.Match(lineCommand, AuthorSeparatorPattern);
+            var match = Regex.Match(lineCommand, LinePattern, RegexOptions.Singleline);
 
             if (!match.Success)
             {
-                (message, metadata, _) = SplitMessageAndMetadata(lineCommand);
-                return new Line(message, metadata);
+                return new Line(lineCommand, string.Empty);
             }
 
-            var author = Regex.Unescape(lineCommand.Substring(0, match.Index));
-            var line = Regex.Unescape(lineCommand.Substring(match.Index + match.Length).Trim(MessageTrim));
-            (message, metadata, _) = SplitMessageAndMetadata(line);
+            string author = Regex.Unescape(match.Groups["author"].Value);
+            string message = Regex.Unescape(match.Groups["message"].Value);
+            string metadata = Regex.Unescape(match.Groups["metadata"].Value);
 
             return new Line(author, message, metadata);
         }
@@ -73,13 +71,25 @@ namespace MiguelGameDev.DialogueSystem.Parser.Command
             var splits = lineCommand.Split(GetBranchSplitter(commandPath.Level));
             var branchPosition = new BranchPosition(commandPath.CommandIndex, branchIndex);
 
-            var (message, metadata, _) = SplitMessageAndMetadata(splits[0]);
-            
+            var match = Regex.Match(splits[0], OptionPattern, RegexOptions.Singleline);
+
+            string message, metadata;
+            if (!match.Success)
+            {
+                message = splits[0];
+                metadata = string.Empty;
+            }
+            else
+            {
+                message = Regex.Unescape(match.Groups["message"].Value);
+                metadata = Regex.Unescape(match.Groups["metadata"].Value);
+            }
+
             if (splits.Length > 1)
             {
                 var branchText = lineCommand.Substring(splits[0].Length);
                 var branch = _branchParser.Parse(branchText, commandPath.CommandIndex, commandPath.Level + 1, commandPath.BranchPositions.Append(branchPosition).ToArray());
-                
+
                 return new SelectBranchInfo(message, metadata, branchPosition, branch);
             }
 

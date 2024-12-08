@@ -7,7 +7,7 @@ namespace MiguelGameDev.DialogueSystem.Parser.Command
     public class LineCommandParser : CommandParser
     {
         public override string StartsWith => "- ";
-        public const string AuthorSeparatorPattern = @"(?<!\\): ";
+        public const string LinePattern = @"^(?:(?<author>[^:]+):\s)?(?<message>.*?)(?:\s\[(?<metadata>.+)\])?$";
         private readonly char[] MessageTrim = new char[] { ' ', '\n' };
 
         private readonly ILineCommandFactory _lineCommandFactory;
@@ -32,19 +32,16 @@ namespace MiguelGameDev.DialogueSystem.Parser.Command
 
         private Line CreateLine(string lineCommand)
         {
-            string message, metadata;
-            var match = Regex.Match(lineCommand, AuthorSeparatorPattern);
-            
-            
+            var match = Regex.Match(lineCommand, LinePattern, RegexOptions.Singleline);
+
             if (!match.Success)
             {
-                (message, metadata, _) = SplitMessageAndMetadata(lineCommand);
-                return new Line(message, metadata);
+                return new Line(lineCommand, string.Empty);
             }
 
-            var author = Regex.Unescape(lineCommand.Substring(0, match.Index));
-            var line = Regex.Unescape(lineCommand.Substring(match.Index + match.Length).Trim(MessageTrim));
-            (message, metadata, _) = SplitMessageAndMetadata(line);
+            string author = Regex.Unescape(match.Groups["author"].Value);
+            string message = Regex.Unescape(match.Groups["message"].Value);
+            string metadata = Regex.Unescape(match.Groups["metadata"].Value);
 
             return new Line(author, message, metadata);
         }
