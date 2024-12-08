@@ -1,8 +1,10 @@
 ﻿using MiguelGameDev.DialogueSystem.Commands;
 using MiguelGameDev.DialogueSystem.Parser.Command;
 using System.Collections.Generic;
+using System.Text;
 using System.Text.RegularExpressions;
 using UnityEngine;
+using UnityEngine.Windows;
 
 namespace MiguelGameDev.DialogueSystem.Editor
 {
@@ -11,9 +13,9 @@ namespace MiguelGameDev.DialogueSystem.Editor
         private readonly IHighlightCommandFactory _highlightCommandFactory;
 
         public override string StartsWith => "do ";
-        public const string MethodPattern = @"^(?<methodName>\w+)\((?<params>.*)\)$";
-        public const string ParamsPattern = @"(\"".*?\""|[^,\(\)\s]+)";
-
+        //public const string MethodPattern = @"^(?<methodName>\w+)\((?<params>.*)\)$";
+        //public const string ParamsPattern = @"\"".*?\""|[^,\(\)\s]+";
+        public const string MethodPattern = @"(?<methodName>\w+)\(|(?<string>""(?:[^""\\]|\\.)*"")|(?<float>\d+\.\d+f?)|(?<int>\d+)|(?<bool>\btrue\b|\bfalse\b)|(?<separator>[,])|(?<paren>[()])|(?<whitespace>\s+)|(?<other>.)";
         private readonly string _startWithColor;
         private readonly string _invokeMethodColor;
         private readonly string _stringParamColor;
@@ -52,73 +54,56 @@ namespace MiguelGameDev.DialogueSystem.Editor
 
         private string HighlightText(string lineCommand)
         {
-            string highlightedCommand = $"<b><color={_startWithColor}>{StartsWith}</color></b>";
+            StringBuilder highlightedCommandBuilder = new StringBuilder($"<b><color={_startWithColor}>{StartsWith}</color></b>");
             lineCommand = lineCommand.Substring(StartsWith.Length);
 
-            var match = Regex.Match(lineCommand, MethodPattern, RegexOptions.Singleline);
+            highlightedCommandBuilder.Append($"<color={_invokeMethodColor}>");
 
-            if (!match.Success)
+            var matches = Regex.Matches(lineCommand, MethodPattern, RegexOptions.Singleline);
+
+            bool isValid = false;
+            foreach (Match match in matches)
             {
-                highlightedCommand += $"\n<color={_wrongTextColor}><i>{Regex.Unescape(lineCommand)}</i></color> <color={_errorColor}>(this will be ignored)</color>";
-                return highlightedCommand;
+                // Si coincide con un grupo específico, le aplicamos color
+                if (match.Groups["methodName"].Success)
+                {
+                    highlightedCommandBuilder.Append(Regex.Escape(match.Value));
+                    isValid = true;
+                }
+                else if (match.Groups["string"].Success)
+                {
+                    highlightedCommandBuilder.Append($"<color={_stringParamColor}>{Regex.Escape(match.Value)}</color>");
+                }
+                else if (match.Groups["float"].Success)
+                {
+                    highlightedCommandBuilder.Append($"<color={_numericParamColor}>{Regex.Escape(match.Value)}</color>");
+                }
+                else if (match.Groups["int"].Success)
+                {
+                    highlightedCommandBuilder.Append($"<color={_numericParamColor}>{Regex.Escape(match.Value)}</color>");
+                }
+                else if (match.Groups["bool"].Success)
+                {
+                    highlightedCommandBuilder.Append($"<color={_booleanParamColor}>{Regex.Escape(match.Value)}</color>");
+                }
+                else if (match.Groups["other"].Success)
+                {
+                    highlightedCommandBuilder.Append($"<color={_wrongTextColor}>{Regex.Escape(match.Value)}</color>");
+                }
+                else if (match.Groups["paren"].Success || match.Groups["separator"].Success || match.Groups["whitespace"].Success)
+                {
+                    highlightedCommandBuilder.Append(Regex.Escape(match.Value));
+                }
             }
 
-            string methodName = match.Groups["methodName"].Value;
-            string parameterValuesString = match.Groups["params"].Value;
+            highlightedCommandBuilder.Append("</color>");
 
-            var parameterValues = ParseParameters(parameterValuesString);
-
-            string formatedParameters = "";
-            foreach (var parameterValue in parameterValues)
+            if (!isValid)
             {
-                var parameter = parameterValue.Trim();
-                if (formatedParameters.Length > 0)
-                {
-                    formatedParameters += ", ";
-                }
-
-                if (parameter == "true" || parameter == "false")
-                {
-                    formatedParameters += $"<color={_booleanParamColor}>{parameter}</color>";
-                }
-                else if (parameter.Length >= 2 && parameter[0] == '"' && parameter[^1] == '"')
-                {
-                    formatedParameters += $"<color={_stringParamColor}>{parameter}</color>";
-                }
-                else if (double.TryParse(parameter, out var __))
-                {
-                    formatedParameters += $"<color={_numericParamColor}>{parameter}</color>";
-                }
-                else
-                {
-                    formatedParameters += $"<color={_defaultParamColor}>{parameterValue}</color>";
-                }
+                highlightedCommandBuilder.Append($" <color={_errorColor}>(method is not defined)</color>");
             }
 
-            highlightedCommand += $"<color={_invokeMethodColor}>{methodName}({formatedParameters})</color>";
-
-            return highlightedCommand;
-
-
-            string[] ParseParameters(string parameterValuesString)
-            {
-                List<string> parameters = new List<string>();
-
-                // Expresión regular para separar parámetros
-                //var matches = Regex.Matches(parameterValuesString, ParamsPattern);
-
-                var matches = Regex.Matches(parameterValuesString, ParamsPattern, RegexOptions.Singleline);
-
-                foreach (Match match in matches)
-                {
-                    if (match.Groups[1].Success) // Si es una cadena entre comillas
-                        parameters.Add(match.Groups[1].Value);
-                    else if (match.Groups[2].Success) // Otros tipos de parámetros
-                        parameters.Add(match.Groups[2].Value.Trim());
-                }
-
-                return parameters.ToArray();
-            }
+            return highlightedCommandBuilder.ToString();
         }
     }
 

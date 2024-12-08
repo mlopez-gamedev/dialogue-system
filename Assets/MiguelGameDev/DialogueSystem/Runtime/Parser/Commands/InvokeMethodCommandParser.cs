@@ -11,7 +11,7 @@ namespace MiguelGameDev.DialogueSystem.Parser.Command
 
         public override string StartsWith => "do ";
         public const string MethodPattern = @"^(?<methodName>\w+)\((?<params>.*)\)$";
-        public const string ParamsPattern = @"(\"".*?\""|[^,\(\)\s]+)";
+        public const string ParamsPattern = @"\"".*?\""|[^,\(\)\s]+";
 
         public InvokeMethodCommandParser(IInvokeMethodCommandFactory invokeMethodCommandFactory)
         {
@@ -38,7 +38,7 @@ namespace MiguelGameDev.DialogueSystem.Parser.Command
 
             Debug.Assert(match.Success, $"Line command is not valid: {lineCommand}");
 
-            string methodName = match.Groups["methodName"].Value;
+            string methodName = Regex.Escape(match.Groups["methodName"].Value);
             string parameterValuesString = match.Groups["params"].Value;
 
             // Dividimos los parámetros respetando las cadenas entre comillas
@@ -49,22 +49,15 @@ namespace MiguelGameDev.DialogueSystem.Parser.Command
 
             string[] ParseParameters(string parameterValuesString)
             {
-                List<string> parameters = new List<string>();
-
-                // Expresión regular para separar parámetros
-                //var matches = Regex.Matches(parameterValuesString, ParamsPattern);
-
                 var matches = Regex.Matches(parameterValuesString, ParamsPattern, RegexOptions.Singleline);
+                string[] parameters = new string[matches.Count];
 
-                foreach (Match match in matches)
+                for (int i = 0; i < matches.Count; ++i)
                 {
-                    if (match.Groups[1].Success) // Si es una cadena entre comillas
-                        parameters.Add(match.Groups[1].Value);
-                    else if (match.Groups[2].Success) // Otros tipos de parámetros
-                        parameters.Add(match.Groups[2].Value.Trim());
+                    parameters[i] = Regex.Escape(matches[i].Value).Trim();
                 }
 
-                return parameters.ToArray();
+                return parameters;
             }
         }
     }

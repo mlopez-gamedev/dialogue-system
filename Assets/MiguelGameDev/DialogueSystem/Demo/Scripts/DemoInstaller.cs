@@ -1,7 +1,4 @@
-using MiguelGameDev.DialogueSystem.Commands;
 using MiguelGameDev.DialogueSystem.Parser.Command;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace MiguelGameDev.DialogueSystem.Demo

@@ -15,14 +15,15 @@ MonoBehaviour:
   _text: "~ Start\n// Esto es un comentario\nel comentario sigue en la siguiente
     l\xEDnea hasta que no se introduce un nuevo comando\n// Aunque lo recomendable
     es usar \"//\" en cada l\xEDnea\n// Los comentarios son ignorados por el runtime\n=>
-    Otro\n- Alguien dice algo\n* Contestas una cosa\n\t- Paco: Pues no\n\t- Miguel:
-    Pues s\xED\n\t- Pepe: Nanai [disabled]\n* Contestas otra cosa\n\t- Pepe: Vale\n\t=>
-    Start\n\tdo DoSomething(false, 1.5, \"aString\", badObject)\n\t~ Otro\n\t~ Otro\n*
-    Y una tercera opci\xF3n que contin\xFAa la historia directamente\n=> Otro\n-
-    Paco: Hola dasdas dssssas\ndo DoSomething(true, 2.5, \"someString\")\n- Miguel:
-    lalalalasssssssasssssssssssasdasasasas dsdsadsad sadsa d sad sadsadsadsadsadsadsadsa
-    sasasa s as as a s as as a sa s a sa s as a sa s a sa s as as a s as a s as as
-    a sa s as asasjjdkjaslkdjsakljdsad\n- Multil\xEDnea: Qu\xE9 dicessssssssssss!!\nsasasasalskalkslakssas\n-
-    Una pregunta de una sola respuesta\n* Una sola opci\xF3n\n\t- Una sola respuesta\n=>
-    Start\n~ Duplicated title\n~ Duplicated title\n=> Bad link\n- Subautor\\: dsadsadsadsad:
+    Otro\n- Alguien dice algo vonn salto\nde\nlinea\ny\nmetadata [disabled]\n* Contestas
+    una cosa\n\t- Paco: Pues no\n\t- Miguel: Pues s\xED\n\t- Pepe: Nanaifdfdsfdsf\nfdfdsfdsfdsfdsf
+    [disabled]\n* Contestas otra cosa\n\t- Pepe: Vale\n\t=> Start\n\tdo DoSomething(false,
+    1.5, \"aString\", badObject)\n\t~ Otro\n\t~ Otro\n* Y una tercera opci\xF3n que
+    contin\xFAa la historia directamente\n=> Otro\n- Paco: Hola dasdas dssssas\ndo
+    DoSomething(true, 2.5, \"someString\")\n- Miguel: lalalalasssssssasssssssssssasdasasasas
+    dsdsadsad sadsa d sad sadsadsadsadsadsadsadsa sasasa s as as a s as as a sa s
+    a sa s as a sa s a sa s as as a s as a s as as a sa s as asasjjdkjaslkdjsakljdsad\n-
+    Multil\xEDnea: Qu\xE9 dicessssssssssss!!\nsasasasalskalkslakssas\n- Una pregunta
+    de una sola respuesta\n* Una sola opci\xF3n\n\t- Una sola respuesta\n=> Start\n~
+    Duplicated title\n~ Duplicated title\n=> Bad link\n- Subautor\\: dsadsadsadsad:
     sasasklakldaskdlaskdlksaldksaldklsa\xF1d\n- Paco: sasasasasasas\ndsadsadsad\ndsdsadsadasds\n\n"
