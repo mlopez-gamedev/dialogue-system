@@ -48,7 +48,6 @@ namespace MiguelGameDev.DialogueSystem.Editor
             string newLine = string.Empty;
             if (lineCommand.EndsWith("\n"))
             {
-                Debug.Log("Ends with \\n!");
                 newLine = "\n";
             }
 
@@ -70,7 +69,6 @@ namespace MiguelGameDev.DialogueSystem.Editor
             if (!string.IsNullOrEmpty(author))
             {
                 highlightedCommand += $"<color={_authorColor}>{author}</color><color={_authorSeparatorColor}>:</color> ";
-                return highlightedCommand + newLine;
             }
 
             highlightedCommand += message;

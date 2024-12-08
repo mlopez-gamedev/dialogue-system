@@ -1,4 +1,6 @@
 ﻿using MiguelGameDev.DialogueSystem.Commands;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text.RegularExpressions;
 
 namespace MiguelGameDev.DialogueSystem.Parser.Command
@@ -8,6 +10,8 @@ namespace MiguelGameDev.DialogueSystem.Parser.Command
         private readonly IInvokeMethodCommandFactory _invokeMethodCommandFactory;
 
         public override string StartsWith => "do ";
+        public const string MethodPattern = @"^(?<methodName>\w+)\((?<params>.*)\)$";
+        public const string ParamsPattern = @"(\"".*?\""|[^,\(\)\s]+)";
 
         public InvokeMethodCommandParser(IInvokeMethodCommandFactory invokeMethodCommandFactory)
         {
@@ -30,17 +34,38 @@ namespace MiguelGameDev.DialogueSystem.Parser.Command
         private IDialogueCommand CreateInvokeMethod(string lineCommand)
         {
             lineCommand = lineCommand.Substring(StartsWith.Length);
-            var lines = lineCommand.Split("\n");
-            lineCommand = Regex.Unescape(lines[0]).Trim();
+            var match = Regex.Match(lineCommand, MethodPattern, RegexOptions.Singleline);
 
-            int paramsStartIndex = lineCommand.IndexOf("(");
+            Debug.Assert(match.Success, $"Line command is not valid: {lineCommand}");
 
-            string methodName = lineCommand.Substring(0, paramsStartIndex);
-            string parameterValuesString = lineCommand.Substring(paramsStartIndex + 1, lineCommand.Length - lineCommand.IndexOf("(") - 2);
+            string methodName = match.Groups["methodName"].Value;
+            string parameterValuesString = match.Groups["params"].Value;
 
-            var parameterValues = parameterValuesString.Split(',');
+            // Dividimos los parámetros respetando las cadenas entre comillas
+            var parameterValues = ParseParameters(parameterValuesString);
 
             return _invokeMethodCommandFactory.CreateInvokeMethodCommand(methodName, parameterValues);
+
+
+            string[] ParseParameters(string parameterValuesString)
+            {
+                List<string> parameters = new List<string>();
+
+                // Expresión regular para separar parámetros
+                //var matches = Regex.Matches(parameterValuesString, ParamsPattern);
+
+                var matches = Regex.Matches(parameterValuesString, ParamsPattern, RegexOptions.Singleline);
+
+                foreach (Match match in matches)
+                {
+                    if (match.Groups[1].Success) // Si es una cadena entre comillas
+                        parameters.Add(match.Groups[1].Value);
+                    else if (match.Groups[2].Success) // Otros tipos de parámetros
+                        parameters.Add(match.Groups[2].Value.Trim());
+                }
+
+                return parameters.ToArray();
+            }
         }
     }
 }

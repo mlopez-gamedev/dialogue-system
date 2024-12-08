@@ -1,6 +1,6 @@
 ﻿using MiguelGameDev.DialogueSystem.Commands;
 using MiguelGameDev.DialogueSystem.Parser.Command;
-using System.Reflection;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using UnityEngine;
 
@@ -11,6 +11,8 @@ namespace MiguelGameDev.DialogueSystem.Editor
         private readonly IHighlightCommandFactory _highlightCommandFactory;
 
         public override string StartsWith => "do ";
+        public const string MethodPattern = @"^(?<methodName>\w+)\((?<params>.*)\)$";
+        public const string ParamsPattern = @"(\"".*?\""|[^,\(\)\s]+)";
 
         private readonly string _startWithColor;
         private readonly string _invokeMethodColor;
@@ -53,58 +55,70 @@ namespace MiguelGameDev.DialogueSystem.Editor
             string highlightedCommand = $"<b><color={_startWithColor}>{StartsWith}</color></b>";
             lineCommand = lineCommand.Substring(StartsWith.Length);
 
-            var lines = lineCommand.Split("\n");
-            lineCommand = Regex.Unescape(lines[0]).Trim();
+            var match = Regex.Match(lineCommand, MethodPattern, RegexOptions.Singleline);
 
-            int paramsStartIndex = lineCommand.IndexOf("(");
-
-            try
+            if (!match.Success)
             {
-                string methodName = lineCommand.Substring(0, paramsStartIndex);
-                string parameterValuesString = lineCommand.Substring(paramsStartIndex + 1, lineCommand.Length - lineCommand.IndexOf("(") - 2);
+                highlightedCommand += $"\n<color={_wrongTextColor}><i>{Regex.Unescape(lineCommand)}</i></color> <color={_errorColor}>(this will be ignored)</color>";
+                return highlightedCommand;
+            }
 
-                var parameterValues = parameterValuesString.Split(',');
+            string methodName = match.Groups["methodName"].Value;
+            string parameterValuesString = match.Groups["params"].Value;
 
-                string formatedParameters = "";
-                foreach (var parameterValue in parameterValues)
+            var parameterValues = ParseParameters(parameterValuesString);
+
+            string formatedParameters = "";
+            foreach (var parameterValue in parameterValues)
+            {
+                var parameter = parameterValue.Trim();
+                if (formatedParameters.Length > 0)
                 {
-                    var parameter = parameterValue.Trim();
-                    if (formatedParameters.Length > 0)
-                    {
-                        formatedParameters += ", ";
-                    }
-
-                    if (parameter == "true" || parameter == "false")
-                    {
-                        formatedParameters += $"<color={_booleanParamColor}>{parameter}</color>";
-                    }
-                    else if (parameter.Length >= 2 && parameter[0] == '"' && parameter[parameter.Length - 1] == '"')
-                    {
-                        formatedParameters += $"<color={_stringParamColor}>{parameter}</color>";
-                    }
-                    else if (double.TryParse(parameter, out var __))
-                    {
-                        formatedParameters += $"<color={_numericParamColor}>{parameter}</color>";
-                    }
-                    else
-                    {
-                        formatedParameters += $"<color={_defaultParamColor}>{parameterValue}</color>";
-                    }
+                    formatedParameters += ", ";
                 }
 
-                highlightedCommand += $"<color={_invokeMethodColor}>{methodName}({formatedParameters})</color>";
-            }
-            catch
-            {
-                highlightedCommand += $"<color={_invokeMethodColor}>{lineCommand}</color>";
+                if (parameter == "true" || parameter == "false")
+                {
+                    formatedParameters += $"<color={_booleanParamColor}>{parameter}</color>";
+                }
+                else if (parameter.Length >= 2 && parameter[0] == '"' && parameter[^1] == '"')
+                {
+                    formatedParameters += $"<color={_stringParamColor}>{parameter}</color>";
+                }
+                else if (double.TryParse(parameter, out var __))
+                {
+                    formatedParameters += $"<color={_numericParamColor}>{parameter}</color>";
+                }
+                else
+                {
+                    formatedParameters += $"<color={_defaultParamColor}>{parameterValue}</color>";
+                }
             }
 
-            for (int i = 1; i < lines.Length; ++i)
-            {
-                highlightedCommand += $"\n<color={_wrongTextColor}><i>{Regex.Unescape(lines[i])}</i></color> <color={_errorColor}>(this will be ignored)</color>";
-            }
+            highlightedCommand += $"<color={_invokeMethodColor}>{methodName}({formatedParameters})</color>";
 
             return highlightedCommand;
+
+
+            string[] ParseParameters(string parameterValuesString)
+            {
+                List<string> parameters = new List<string>();
+
+                // Expresión regular para separar parámetros
+                //var matches = Regex.Matches(parameterValuesString, ParamsPattern);
+
+                var matches = Regex.Matches(parameterValuesString, ParamsPattern, RegexOptions.Singleline);
+
+                foreach (Match match in matches)
+                {
+                    if (match.Groups[1].Success) // Si es una cadena entre comillas
+                        parameters.Add(match.Groups[1].Value);
+                    else if (match.Groups[2].Success) // Otros tipos de parámetros
+                        parameters.Add(match.Groups[2].Value.Trim());
+                }
+
+                return parameters.ToArray();
+            }
         }
     }
 
