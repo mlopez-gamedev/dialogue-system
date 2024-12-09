@@ -12,7 +12,7 @@
             _goToTitle = goToTitle;
         }
 
-        public void CreateBranches(IBranch ___)
+        public void CreateBranches(IBranch _)
         {
             // Nothing to do here
         }

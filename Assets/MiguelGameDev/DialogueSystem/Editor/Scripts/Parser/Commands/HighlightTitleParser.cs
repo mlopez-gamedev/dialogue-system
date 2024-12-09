@@ -2,6 +2,7 @@
 using MiguelGameDev.DialogueSystem.Parser.Command;
 using System.Text.RegularExpressions;
 using UnityEngine;
+using static PlasticPipe.PlasticProtocol.Messages.NegotiationCommand;
 
 namespace MiguelGameDev.DialogueSystem.Editor
 {
@@ -41,7 +42,7 @@ namespace MiguelGameDev.DialogueSystem.Editor
 
         private string HighlightText(string lineCommand, out string title)
         {
-            string highlightedCommand = $"<b><color={_startWithColor}>{StartsWith}</color></b>";
+            string highlightedCommand = $"<color={_startWithColor}>{StartsWith}</color>";
 
             lineCommand = lineCommand.Substring(StartsWith.Length);
 
@@ -50,7 +51,12 @@ namespace MiguelGameDev.DialogueSystem.Editor
             highlightedCommand += $"<color={_titleColor}>{title}</color>";
             for (int i = 1; i < lines.Length; ++i)
             {
-                highlightedCommand += $"\n<color={_wrongTextColor}><i>{Regex.Unescape(lines[i])}</i></color> <color={_errorColor}>(this will be ignored)</color>";
+                if (string.IsNullOrWhiteSpace(lines[i]))
+                {
+                    highlightedCommand += $"\n{lines[i]}";
+                    continue;
+                }
+                highlightedCommand += $"\n<color={_wrongTextColor}>{Regex.Unescape(lines[i])}</color> <i><color={_errorColor}>(this will be ignored)</color></i>";
             }
             return highlightedCommand;
         }

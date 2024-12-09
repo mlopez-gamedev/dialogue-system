@@ -9,6 +9,9 @@ namespace MiguelGameDev.DialogueSystem.Editor
     {
         protected readonly StringBuilder _stringBuilder;
         private readonly string _highlightedString;
+        
+        protected IDialogue _dialogue;
+        protected IBranch _branch;
 
         public HighlightCommand(StringBuilder stringBuilder, string highlightedString)
         {
@@ -18,18 +21,21 @@ namespace MiguelGameDev.DialogueSystem.Editor
 
         public void CreateBranches(IBranch __)
         {
-            // Nothing to do here
+
         }
 
-        public virtual void Setup(IDialogue __, IBranch ___)
+        public virtual void Setup(IDialogue dialogue, IBranch branch)
         {
-            // Nothing to do here
+            _dialogue = dialogue;
+            _branch = branch;
         }
 
         public virtual void Execute()
         {
-            if (_stringBuilder.Length > 0)
+            Debug.Log($"{_branch.Index} : {_branch.CurrentCommandIndex} : {_branch.IsMain} => {_highlightedString}");
+            if (!_branch.IsMain || _branch.Index != 0 || _branch.CurrentCommandIndex != 0)
             {
+                Debug.Log("NeedsAppendLine " + _highlightedString);
                 _stringBuilder.AppendLine();
             }
             _stringBuilder.Append(Regex.Unescape(_highlightedString));

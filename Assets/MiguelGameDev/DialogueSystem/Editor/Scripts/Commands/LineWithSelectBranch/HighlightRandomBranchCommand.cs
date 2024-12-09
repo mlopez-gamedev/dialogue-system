@@ -13,6 +13,7 @@ namespace MiguelGameDev.DialogueSystem.Editor
 
         public override void Setup(IDialogue dialogue, IBranch branch)
         {
+            base.Setup(dialogue, branch);
             foreach (var selector in _branchSelectors)
             {
                 if (selector.Branch != null)

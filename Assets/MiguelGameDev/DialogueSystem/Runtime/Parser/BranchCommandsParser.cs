@@ -18,7 +18,6 @@ namespace MiguelGameDev.DialogueSystem.Parser
 
         public IDialogueCommand[] ParseCommands(string text, int level = 0, params BranchPosition[] branchPositions)
         {
-            text = $"\n{text}";
             var baseSplitter = _baseParser.GetBranchSplitter(level);
             var splitterLength = baseSplitter.Length;
 
@@ -49,9 +48,10 @@ namespace MiguelGameDev.DialogueSystem.Parser
             }
 
             // Detect invalid command at the beginning, so user can write
-            if (matches[0].Index > splitterLength)
+            if (matches[0].Index > splitterLength - 1)
             {
-                int pos = splitterLength + 1;
+
+                int pos = splitterLength - 1;
                 var command = _baseParser.Parse(text.Substring(pos, matches[0].Index - pos), new CommandPath(index, level, branchPositions));
                 ++index;
                 commands.Add(command);

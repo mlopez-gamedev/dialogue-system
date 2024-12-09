@@ -80,7 +80,7 @@ namespace MiguelGameDev.DialogueSystem.Editor
             var randomBranchCommandParser = new HighlightRandomBranchCommandParser(_highlightRandomBranchCommandFactory, branchParser, _style);
             var commentParser = new HighlightCommentParser(_highlightCommandFactory, _style);
             var defaultParser = new DefaultHighlightParser(_highlightCommandFactory, _style);
-            var notFoundParser = new NotFoundHighlightParser(_highlightCommandFactory, _style);
+            var notFoundParser = new HighlightNotFoundParser(_highlightCommandFactory, _style);
 
             selectionLineCommandParser.SetNextParser(lineCommandParser);
             lineCommandParser.SetNextParser(titleCommandParser);

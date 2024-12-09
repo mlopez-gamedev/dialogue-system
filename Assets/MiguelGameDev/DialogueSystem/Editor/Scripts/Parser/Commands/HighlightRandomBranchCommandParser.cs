@@ -81,10 +81,10 @@ namespace MiguelGameDev.DialogueSystem.Editor
             
             if (string.IsNullOrWhiteSpace(randCommand))
             {
-                return highlightedCommand;
+                return highlightedCommand + randCommand;
             }
             
-            highlightedCommand += Regex.Unescape($"<i><color={_wrongTextColor}>{randCommand}</color></i> <color={_errorColor}>(this will be ignored)</color>");
+            highlightedCommand += Regex.Unescape($"<color={_wrongTextColor}>{randCommand}</color> <i><color={_errorColor}>(this will be ignored)</color></i>");
             return highlightedCommand;
         }
         

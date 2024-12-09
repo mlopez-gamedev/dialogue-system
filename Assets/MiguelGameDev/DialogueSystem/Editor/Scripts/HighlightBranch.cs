@@ -14,9 +14,13 @@ namespace MiguelGameDev.DialogueSystem.Editor
 
         private int _index;
         private BranchPosition[] _path;
+        
+        private int _currentCommandIndex;
 
         public IBranch Parent => _parent;
         public bool IsMain => _parent == null;
+        public int Index => _index;
+        public int CurrentCommandIndex => _currentCommandIndex;
         public BranchPosition[] Path => _path;
 
         public HighlightBranch(IDialogueCommand[] commands, int index = 0, params BranchPosition[] path)
@@ -36,7 +40,7 @@ namespace MiguelGameDev.DialogueSystem.Editor
         public void Setup(IDialogue dialogue, IBranch parent = null)
         {
             _dialogue = dialogue;
-            _parent = null;
+            _parent = parent;
 
             foreach (var branch in _positionToBranch.Values)
             {
@@ -51,11 +55,11 @@ namespace MiguelGameDev.DialogueSystem.Editor
 
         public void Start()
         {
-            _index = 0;
+            _currentCommandIndex = 0;
             foreach (var command in _commandQueue)
             {
                 command.Execute();
-                ++_index;
+                ++_currentCommandIndex;
             }
         }
 

@@ -20,6 +20,8 @@ namespace MiguelGameDev.DialogueSystem
 
         public bool IsMain => _parent == null;
         public IBranch Parent => _parent;
+        public int Index => _index;
+        public int CurrentCommandIndex => _currentCommandIndex;
         public BranchPosition[] Path => _path;
 
         public Branch(IDialogueCommand[] commands, int index = 0, params BranchPosition[] path)
@@ -75,13 +77,13 @@ namespace MiguelGameDev.DialogueSystem
         public void Start()
         {
             _currentCommandIndex = 0;
-            ExecuteCurrentCommand(_currentCommandIndex);
+            ExecuteCurrentCommand();
         }
 
         public void Next()
         {
             ++_currentCommandIndex;
-            ExecuteCurrentCommand(_currentCommandIndex);
+            ExecuteCurrentCommand();
         }
 
         public bool TrySelectBranch(int branchIndex, out IBranch branch)
@@ -99,7 +101,7 @@ namespace MiguelGameDev.DialogueSystem
         public void GoTo(int index)
         {
             _currentCommandIndex = index;
-            ExecuteCurrentCommand(_currentCommandIndex);
+            ExecuteCurrentCommand();
         }
 
         public IBranch GoToBranchAt(BranchPosition branchPosition)
@@ -113,11 +115,11 @@ namespace MiguelGameDev.DialogueSystem
             _positionToBranch.Add(position, branch);
         }
 
-        private void ExecuteCurrentCommand(int index)
+        private void ExecuteCurrentCommand()
         {
             Assert.IsNotNull(_commandQueue, "Dialogue has not been setup");
 
-            if (index >= _commandQueue.Length)
+            if (_currentCommandIndex >= _commandQueue.Length)
             {
                 if (IsMain)
                 {
@@ -129,7 +131,7 @@ namespace MiguelGameDev.DialogueSystem
                 return;
             }
 
-            _commandQueue[index].Execute();
+            _commandQueue[_currentCommandIndex].Execute();
         }
     }
 }

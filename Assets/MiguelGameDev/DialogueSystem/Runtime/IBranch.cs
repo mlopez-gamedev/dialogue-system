@@ -4,6 +4,8 @@
     {
         bool IsMain { get; }
         IBranch Parent { get; }
+        int Index { get; }
+        int CurrentCommandIndex { get; }
         BranchPosition[] Path { get; }
         void CreateBranches();
         void Setup(IDialogue dialogue, IBranch parent = null);

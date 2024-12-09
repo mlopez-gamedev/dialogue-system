@@ -13,12 +13,12 @@ namespace MiguelGameDev.DialogueSystem.Commands
             _line = line;
         }
 
-        public void CreateBranches(IBranch ___)
+        public void CreateBranches(IBranch _)
         {
             // Nothing to do here
         }
 
-        public void Setup(IDialogue __, IBranch ___)
+        public void Setup(IDialogue _, IBranch __)
         {
             // Nothing to do here
         }

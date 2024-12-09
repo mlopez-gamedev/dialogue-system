@@ -30,7 +30,7 @@ namespace MiguelGameDev.DialogueSystem.Editor
             }
             
             var highlightedText = GetBranchStarts(commandPath.Level);
-            lineCommand = $"<color={_wrongTextColor}><i>{lineCommand}</i></color> <color={_errorColor}>(this will be ignored)</color>";
+            lineCommand = $"<color={_wrongTextColor}>{lineCommand}</color> <i><color={_errorColor}>(this will be ignored)</color></i>";
             highlightedText += Regex.Unescape(lineCommand);
 
             command = _highlightCommandFactory.CreateHighlightCommand(highlightedText);

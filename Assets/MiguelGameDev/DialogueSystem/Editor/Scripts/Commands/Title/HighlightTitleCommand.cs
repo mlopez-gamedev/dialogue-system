@@ -19,11 +19,12 @@ namespace MiguelGameDev.DialogueSystem.Editor
             _colorWrong = "#" + ColorUtility.ToHtmlStringRGB(style.ErrorColor);
         }
 
-        public override void Setup(IDialogue dialogue, IBranch __)
+        public override void Setup(IDialogue dialogue, IBranch branch)
         {
+            base.Setup(dialogue, branch);
             try
             {
-                dialogue.RegisterTitle(_title, _path);
+                _dialogue.RegisterTitle(_title, _path);
             }
             catch
             {

@@ -8,17 +8,11 @@ namespace MiguelGameDev.DialogueSystem.Editor
     {
         private readonly string _title;
         private readonly string _colorWrong;
-        private IDialogue _dialogue;
 
         public HighlightGoToCommand(string title, HighlightStyle style, StringBuilder stringBuilder, string highlightedString) : base(stringBuilder, highlightedString)
         {
             _title = title;
             _colorWrong = "#" + ColorUtility.ToHtmlStringRGB(style.ErrorColor);
-        }
-
-        public override void Setup(IDialogue dialogue, IBranch __)
-        {
-            _dialogue = dialogue;
         }
 
         public override void Execute()

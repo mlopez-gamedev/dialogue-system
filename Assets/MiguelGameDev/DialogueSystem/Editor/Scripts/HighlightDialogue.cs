@@ -7,8 +7,8 @@ namespace MiguelGameDev.DialogueSystem.Editor
     {
         public event System.Action OnDialogueEnd;
 
-        private IBranch _mainBranch;
-        private Dictionary<string, CommandPath> _titles = new Dictionary<string, CommandPath>();
+        private readonly IBranch _mainBranch;
+        private readonly Dictionary<string, CommandPath> _titles;
 
         public HighlightDialogue(IBranch mainBranch)
         {

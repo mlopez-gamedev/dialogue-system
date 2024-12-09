@@ -54,7 +54,7 @@ namespace MiguelGameDev.DialogueSystem.Editor
 
         private string HighlightText(string lineCommand)
         {
-            StringBuilder highlightedCommandBuilder = new StringBuilder($"<b><color={_startWithColor}>{StartsWith}</color></b>");
+            StringBuilder highlightedCommandBuilder = new StringBuilder($"<color={_startWithColor}>{StartsWith}</color>");
             lineCommand = lineCommand.Substring(StartsWith.Length);
 
             highlightedCommandBuilder.Append($"<color={_invokeMethodColor}>");
@@ -100,7 +100,7 @@ namespace MiguelGameDev.DialogueSystem.Editor
 
             if (!isValid)
             {
-                highlightedCommandBuilder.Append($" <color={_errorColor}>(method is not defined)</color>");
+                highlightedCommandBuilder.Append($" <i><color={_errorColor}>(method is not defined)</color></i>");
             }
 
             return highlightedCommandBuilder.ToString();

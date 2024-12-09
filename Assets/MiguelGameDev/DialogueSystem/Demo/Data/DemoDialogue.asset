@@ -16,16 +16,16 @@ MonoBehaviour:
     l\xEDnea hasta que no se introduce un nuevo comando\n// Aunque lo recomendable
     es usar \"//\" en cada l\xEDnea\n// Los comentarios son ignorados por el runtime\n-
     Yo: Hola\n- Alguien an\xF3nimo dice algo\n~ Hello\nrand\n%50\n\t- Hola!\n%50\n\t-
-    Howdy, friend!\n- \xBFLo intentamos otra vez?\n* S\xED\n\t=> Hello\n*No\n- \xBFPues
+    Howdy, friend!\n- \xBFLo intentamos otra vez?\n* S\xED\n\t=> Hello\n* No\n- \xBFPues
     qu\xE9 tal?\n* Contestas una cosa\n\t- Paco: Pues no\n\t- Miguel: Pues s\xED\n\t-
     Pepe: Nanaias\n\t- Paco: Otra subrama\n\t* Di A\n\t\t- Somebody: Dijiste A\n\t*
-    Di B\n\t\t-  Lala: Dijiste B\n\t\t* Otra m\xE1s\n\t\t\t- Pues s\xED\n\t\t* Lalala\n\t\t\t-
+    Di B\n\t\t-  Lala: Dijiste B\n\t\t* Otra m\xE1s\n\t\t\t- \xA1Ol\xE9!\n\t\t* Lalala\n\t\t\t-
     Alguien: Adi\xF3s\n* Contin\xFAa la historia directamente\n* Contestas otra cosa\n\t-
-    Pepe: asasasasas\n\tdo DoSomething(false, 1.5, \"hola, qu\xE9 tal\")\n\t=> End\n*
-    Le das 1.000.000\u20AC\nfdsfsdfsdfdsfsdf\n- Paco: Hola dasdas dssssas\ndo DoSomething(true,
-    2.5, \"someString\")\n- Miguel: lalalalasssssssasssssssssssasdasasasas dsdsadsad
-    sadsa d sad sadsadsadsadsadsadsadsa sasasa s as as a s as as a sa s a sa s as
-    a sa s a sa s as as a s as a s as as a sa s as asasjjdkjaslkdjsakljdsad\n- Una
-    pregunta de una sola respuesta\n* Una sola opci\xF3n\n\t- Una sola respuesta\n-
+    Pepe: asasasasas\n\tdo DoSomething(false, 2.5, \"hola, \xBFqu\xE9 tal? {name:
+    \\\"yo\\\"}\")\n\t=> End\n* Le das 1.000.000\u20AC\nfdsfsdfsdfdsfsdf\n- Paco:
+    Hola dasdas dssssas\ndo DoSomething(true, 2.5, \"someString\")\n- Miguel: lalalalasssssssasssssssssssasdasasasas
+    dsdsadsad sadsa d sad sadsadsadsadsadsadsadsa sasasa s as as a s as as a sa s
+    a sa s as a sa s a sa s as as a s as a s as as a sa s as asasjjdkjaslkdjsakljdsad\n-
+    Una pregunta de una sola respuesta\n* Una sola opci\xF3n\n\t- Una sola respuesta\n-
     Multil\xEDnea: Qu\xE9 dicessssssssssss!!\nsasasasalskalkslakssasdsadsad\nsdsadsadsadsadsadsadsadsa\n=>
     Start\n~ End\n- Y se acab\xF3"

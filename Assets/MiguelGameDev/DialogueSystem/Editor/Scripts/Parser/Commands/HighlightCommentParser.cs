@@ -37,10 +37,10 @@ namespace MiguelGameDev.DialogueSystem.Editor
 
         private string HighlightText(string lineCommand)
         {
-            string highlightedCommand = $"<b><color={_startWithColor}>{StartsWith}</color></b>";
+            string highlightedCommand = $"<color={_startWithColor}>{StartsWith}</color>";
 
             lineCommand = Regex.Unescape(lineCommand.Substring(StartsWith.Length));
-            highlightedCommand += $"<i><color={_commentColor}>{lineCommand}</color></i>";
+            highlightedCommand += $"<color={_commentColor}>{lineCommand}</color>";
             return highlightedCommand;
         }
     }

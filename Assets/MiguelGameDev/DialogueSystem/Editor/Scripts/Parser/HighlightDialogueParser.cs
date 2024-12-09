@@ -1,4 +1,5 @@
 ﻿using MiguelGameDev.DialogueSystem.Parser;
+using System.Diagnostics;
 
 namespace MiguelGameDev.DialogueSystem.Editor
 {
@@ -13,6 +14,7 @@ namespace MiguelGameDev.DialogueSystem.Editor
 
         public HighlightDialogue Parse(string text)
         {
+            text = '\n' + text;
             var mainBranch = _mainParser.Parse(text);
             return new HighlightDialogue(mainBranch);
         }

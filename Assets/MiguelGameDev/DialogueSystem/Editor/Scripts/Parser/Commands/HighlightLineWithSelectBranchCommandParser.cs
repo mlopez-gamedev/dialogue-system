@@ -89,7 +89,7 @@ namespace MiguelGameDev.DialogueSystem.Editor
                 newLine = "\n";
             }
 
-            string highlightedCommand = $"<b><color={_startWithColor}>{StartsWith}</color></b>";
+            string highlightedCommand = $"<color={_startWithColor}>{StartsWith}</color>";
             lineCommand = lineCommand.Substring(StartsWith.Length);
 
             var match = Regex.Match(lineCommand, LinePattern, RegexOptions.Singleline);
@@ -113,7 +113,7 @@ namespace MiguelGameDev.DialogueSystem.Editor
 
             if (!string.IsNullOrEmpty(metadata))
             {
-                highlightedCommand += $" <b><color={_metadataSeparatorColor}>[</color></b><color={_metadataColor}>{metadata}</color><b><color={_metadataSeparatorColor}>]</color></b>";
+                highlightedCommand += $" <color={_metadataSeparatorColor}>[</color><color={_metadataColor}>{metadata}</color><color={_metadataSeparatorColor}>]</color>";
             }
 
             return highlightedCommand + newLine;
@@ -127,7 +127,7 @@ namespace MiguelGameDev.DialogueSystem.Editor
                 newLine = "\n";
             }
 
-            string highlightedCommand = $"<b><color={_selectionLineStartWithColor}>{GetSelectionSplitter(level)}</color></b>";
+            string highlightedCommand = $"<color={_selectionLineStartWithColor}>{GetSelectionSplitter(level)}</color>";
 
             var match = Regex.Match(selectionCommand, OptionPattern, RegexOptions.Singleline);
 
@@ -155,7 +155,7 @@ namespace MiguelGameDev.DialogueSystem.Editor
 
             if (!string.IsNullOrEmpty(metadata))
             {
-                highlightedCommand += $" <b><color={_metadataSeparatorColor}>[</color></b><color={_metadataColor}>{metadata}</color><b><color={_metadataSeparatorColor}>]</color></b>";
+                highlightedCommand += $" <color={_metadataSeparatorColor}>[</color><color={_metadataColor}>{metadata}</color><color={_metadataSeparatorColor}>]</color>";
             }
 
             return highlightedCommand + newLine;
