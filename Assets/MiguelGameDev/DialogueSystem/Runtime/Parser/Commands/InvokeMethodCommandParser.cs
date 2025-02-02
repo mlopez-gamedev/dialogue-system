@@ -11,7 +11,8 @@ namespace MiguelGameDev.DialogueSystem.Parser.Command
 
         public override string StartsWith => "do ";
         public const string MethodPattern = @"^(?<methodName>\w+)\((?<params>.*)\)$";
-        public const string ParamsPattern = @"\"".*?\""|[^,\(\)\s]+";
+        //public const string ParamsPattern = @"\"".*?\""|[^,\(\)\s]+";
+        public const string ParamsPattern = @"""(?:\\.|[^""])*""|[^,\(\)\s]+";
 
         public InvokeMethodCommandParser(IInvokeMethodCommandFactory invokeMethodCommandFactory)
         {
@@ -54,7 +55,13 @@ namespace MiguelGameDev.DialogueSystem.Parser.Command
 
                 for (int i = 0; i < matches.Count; ++i)
                 {
-                    parameters[i] = Regex.Escape(matches[i].Value).Trim();
+                    var param = Regex.Unescape(matches[i].Value).Trim();
+                    if (param.StartsWith("\"") && param.EndsWith("\""))
+                    {
+                        param = param.Substring(1, param.Length - 2);
+                    }
+                    
+                    parameters[i] = param;
                 }
 
                 return parameters;
